@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Registration - CampusEvents</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    {% include 'toast.html' %}
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🎓 CampusEvents
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">Home</a>
+            </li>
+
+            <li>
+                <a href="/events">🎉 Events</a>
+            </li>
+
+            <li>
+                <a href="/student-login">🔐 Student Login</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <div class="form-container">
+
+        <h1>📝 Create Student Account</h1>
+
+        <p>
+            Create your account to register for college events.
+        </p>
+
+        <form method="POST">
+            <input type="hidden" name="next" value="{{ next_page }}">
+
+            <div class="form-group">
+
+                <label for="name">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="Enter your full name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="college_id">
+                    College ID
+                </label>
+
+                <input
+                    type="text"
+                    id="college_id"
+                    name="college_id"
+                    placeholder="Enter your college ID"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    placeholder="Enter your phone number"
+                    maxlength="15"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="password">Password</label>
+
+                <div style="position: relative;">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        required
+                        minlength="6"
+                        style="padding-right: 50px;">
+
+                    <button
+                        type="button"
+                        onclick="togglePassword('password', this)"
+                        style="
+                            position: absolute;
+                            right: 10px;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            border: none;
+                            background: none;
+                            cursor: pointer;
+                            font-size: 18px;
+                        ">
+                        👁️
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="confirm_password">Confirm Password</label>
+
+                <div style="position: relative;">
+
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Confirm your password"
+                        required
+                        minlength="6"
+                        style="padding-right: 50px;">
+
+                    <button
+                        type="button"
+                        onclick="togglePassword('confirm_password', this)"
+                        style="
+                            position: absolute;
+                            right: 10px;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            border: none;
+                            background: none;
+                            cursor: pointer;
+                            font-size: 18px;
+                        ">
+                        👁️
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary">
+                🎓 Create Account
+            </button>
+
+        </form>
+
+
+        <div class="register-link">
+
+            <p>
+                Already have an account?
+            </p>
+
+            <a
+                href="{{ url_for('student_login', next=request.args.get('next')) }}"
+                class="btn btn-secondary">
+                🔐 Student Login
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <footer class="footer">
+
+        <p>
+            © 2026 CampusEvents
+        </p>
+
+    </footer>
+
+<script>
+function togglePassword(inputId, button) {
+
+    const input = document.getElementById(inputId);
+
+    if (input.type === "password") {
+        input.type = "text";
+    } else {
+        input.type = "password";
+    }
+
+}
+</script>
+</body>
+</html>

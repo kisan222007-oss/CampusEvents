@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Event</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    {% include 'toast.html' %}
+
+    <div class="container">
+
+        <div class="dashboard-header">
+
+            <div>
+                <h1>➕ Add Event</h1>
+                <p>Create a new college event.</p>
+            </div>
+
+            <a href="/admin"
+               class="btn">
+
+                ← Admin Dashboard
+
+            </a>
+
+        </div>
+
+
+        <div class="form-card">
+
+            <form method="POST"
+                  action="/add-event">
+
+                <div class="form-group">
+
+                    <label>Event Name</label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="e.g. Fresher Party"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Description</label>
+
+                    <textarea
+                        name="description"
+                        placeholder="Enter event description"
+                        rows="5"
+                        required></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Event Date</label>
+
+                    <input
+                        type="date"
+                        name="event_date"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Location</label>
+
+                    <input
+                        type="text"
+                        name="location"
+                        placeholder="e.g. Main Auditorium"
+                        required>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary">
+
+                    ➕ Create Event
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

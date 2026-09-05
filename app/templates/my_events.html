@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Registrations</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+    {% include 'toast.html' %}
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🎓 CampusEvents
+        </div>
+
+        {% include "event_search_bar.html" %}
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">Home</a>
+            </li>
+
+            <li>
+                <a href="/events">🎉 Events</a>
+            </li>
+
+            <li>
+                <a href="/my-events">🎟️ My Events</a>
+            </li>
+
+            <li>
+                <a href="/student-dashboard">Dashboard</a>
+            </li>
+
+            {% if session.get("student_logged_in") %}
+            <li>
+                <a href="/profile">👤 Profile</a>
+            </li>
+
+            <li>
+                <a href="/student-logout"
+                   class="btn btn-danger"
+                   style="padding: 6px 14px; font-size: 14px;">
+                    🚪 Logout
+                </a>
+            </li>
+            {% endif %}
+
+        </ul>
+
+    </nav>
+
+    <div class="container">
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <h1>🎟️ My Registrations</h1>
+
+                <p>
+                    Your registered college events
+                </p>
+
+            </div>
+
+            <a href="/student-dashboard"
+               class="btn">
+
+                ← Dashboard
+
+            </a>
+
+        </div>
+
+
+        {% if registrations %}
+
+        <div class="registrations-list">
+
+            {% for registration in registrations %}
+
+            <div class="registration-card">
+
+                <div>
+
+                    <h2>
+                        🎉 {{ registration[2] }}
+                    </h2>
+
+                    <p>
+                        👤 {{ registration[1] }}
+                    </p>
+
+                    <p>
+                        🆔 {{ session["student_college_id"] }}
+                    </p>
+
+                    <p>
+                        📅 Registered:
+                        {{ registration[3] }}
+                    </p>
+
+                </div>
+
+                <div>
+
+                    <div class="registration-actions">
+
+                        <span class="registered-badge">
+                            ✓ Registered
+                        </span>
+
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            onclick="openCancelModal(
+                                {{ registration[0] }},
+                                '{{ registration[1] | replace("'", "\\'") }}',
+                                '{{ registration[2] | replace("'", "\\'") }}'
+                            )">
+
+                            ❌ Cancel
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <h2>📭 No Registrations Yet</h2>
+
+            <p>
+                You haven't registered for any events.
+            </p>
+
+            <a href="/events"
+               class="btn btn-primary">
+
+                Browse Events
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- CANCEL REGISTRATION MODAL -->
+
+    <div id="cancelModal" class="modal-overlay">
+
+        <div class="delete-modal">
+
+            <div class="delete-icon">
+                ⚠️
+            </div>
+
+            <h2>Cancel Registration?</h2>
+
+            <p>
+                Are you sure you want to cancel your registration for
+                <strong id="cancelEventName"></strong>?
+            </p>
+
+            <p class="delete-warning">
+                You can register again later if registration is still open.
+            </p>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn"
+                    onclick="closeCancelModal()">
+
+                    Keep Registration
+
+                </button>
+
+                <a
+                    id="confirmCancelButton"
+                    href="#"
+                    class="btn btn-danger">
+
+                    Yes, Cancel
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+<script>
+
+function openCancelModal(registrationId, studentName, eventName) {
+
+    document
+        .getElementById("cancelEventName")
+        .textContent = eventName;
+
+    document
+        .getElementById("confirmCancelButton")
+        .href =
+        "/cancel-registration/" + registrationId;
+
+    document
+        .getElementById("cancelModal")
+        .classList.add("show");
+
+}
+
+
+function closeCancelModal() {
+
+    document
+        .getElementById("cancelModal")
+        .classList.remove("show");
+
+}
+
+
+document
+    .getElementById("cancelModal")
+    .addEventListener("click", function(event) {
+
+        if (event.target === this) {
+
+            closeCancelModal();
+
+        }
+
+    });
+
+</script>
+
+</body>
+
+</html>

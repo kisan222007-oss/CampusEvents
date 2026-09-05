@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Search Events - CampusEvents</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <!-- TOP SEARCH BAR -->
+
+    <header class="search-header">
+
+        <div class="search-container">
+
+            <a href="{{ url_for('home') }}" class="search-logo">
+                🎓 CampusEvents
+            </a>
+
+            <form
+                action="{{ url_for('event_search') }}"
+                method="GET"
+                class="global-search-form"
+            >
+
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ search_query }}"
+                    placeholder="Search events or organizers..."
+                    autocomplete="off"
+                >
+
+                <button type="submit">
+                    🔍 Search
+                </button>
+
+            </form>
+
+        </div>
+
+    </header>
+
+
+    <!-- RESULTS -->
+
+    <main class="search-results-page">
+
+        {% if search_query %}
+
+            <h1>
+                Search results for "{{ search_query }}"
+            </h1>
+
+        {% else %}
+
+            <h1>All Events</h1>
+
+        {% endif %}
+
+
+        {% if search_results %}
+
+            <div class="event-search-grid">
+
+                {% for event in search_results %}
+
+                    <div class="event-search-card">
+
+                        <h2>
+                            {{ event[1] }}
+                        </h2>
+
+                        <p>
+                            {{ event[2] }}
+                        </p>
+
+                        <div class="event-search-details">
+
+                            <p>
+                                📅
+                                <strong>Date:</strong>
+                                {{ event[3] }}
+                            </p>
+
+                            <p>
+                                📍
+                                <strong>Location:</strong>
+                                {{ event[4] }}
+                            </p>
+
+                            <p>
+                                👤
+                                <strong>Organizer:</strong>
+                                {{ event[5] or "Main Admin" }}
+                            </p>
+
+                        </div>
+
+                        <a
+                            href="{{ url_for('register_event', event_id=event[0]) }}"
+                            class="btn btn-primary"
+                        >
+                            Register for Event
+                        </a>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="no-search-results">
+
+                <h2>😕 No events found</h2>
+
+                <p>
+                    We couldn't find an event or organizer matching
+                    "{{ search_query }}".
+                </p>
+
+                <a
+                    href="{{ url_for('events') }}"
+                    class="btn btn-primary"
+                >
+                    View All Events
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </main>
+
+</body>
+
+</html>

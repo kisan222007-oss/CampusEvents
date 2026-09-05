@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Browse Events</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+    {% include 'toast.html' %}
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🎓 CampusEvents
+        </div>
+
+        {% include "event_search_bar.html" %}
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">Home</a>
+            </li>
+
+            <li>
+                <a href="/events">🎉 Events</a>
+            </li>
+
+            {% if session.get("student_logged_in") %}
+
+            <li>
+                <a href="/my-events">🎟️ My Events</a>
+            </li>
+
+            <li>
+                <a href="/student-dashboard">Dashboard</a>
+            </li>
+
+            <li>
+                <a href="/profile">👤 Profile</a>
+            </li>
+
+            <li>
+                <a href="/student-logout"
+                   class="btn btn-danger"
+                   style="padding: 6px 14px; font-size: 14px;">
+                    🚪 Logout
+                </a>
+            </li>
+
+            {% else %}
+
+            <li>
+                <a href="/student-login">🔐 Student Login</a>
+            </li>
+
+            {% endif %}
+
+        </ul>
+
+    </nav>
+
+    <div class="container">
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <h1>🎉 College Events</h1>
+
+                <p>
+                    Discover upcoming events and register.
+                </p>
+
+            </div>
+
+            <a href="/student-dashboard"
+               class="btn">
+
+                ← Dashboard
+
+            </a>
+
+        </div>
+
+
+        <div class="events-grid">
+
+            {% for event in events %}
+
+            <div class="event-card">
+
+                <h2>
+                    {{ event[1] }}
+                </h2>
+
+                <p>
+                    📅 {{ event[3] }}
+                </p>
+
+                <p>
+                    📍 {{ event[4] }}
+                </p>
+
+                <p>
+                    {{ event[2] }}
+                </p>
+
+                <a
+                    href="/register/{{ event[0] }}"
+                    class="btn btn-primary">
+
+                    Register Now
+
+                </a>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <h2>😕 No Events Available</h2>
+
+                <p>
+                    Check again later for upcoming events.
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

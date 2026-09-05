@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Event Analysis - CampusEvents</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    {% include 'toast.html' %}
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🎓 CampusEvents
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/events">Events</a></li>
+            <li><a href="/admin">Dashboard</a></li>
+        </ul>
+
+    </nav>
+
+
+    <div class="container">
+
+        <div class="page-title">
+
+            <h1>Event Analysis 📊</h1>
+
+            <p>
+                Registration analysis using Python and NumPy.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-grid">
+
+            <div class="stat-card">
+                <h3>Total Registrations</h3>
+                <div class="number">
+                    {{ total }}
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <h3>Average Registrations</h3>
+                <div class="number">
+                    {{ average }}
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <h3>Highest Registrations</h3>
+                <div class="number">
+                    {{ maximum }}
+                </div>
+            </div>
+
+
+            <div class="stat-card">
+                <h3>Lowest Registrations</h3>
+                <div class="number">
+                    {{ minimum }}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="page-title">
+
+            <h1>Popular Events 🏆</h1>
+
+        </div>
+
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Event</th>
+                        <th>Registrations</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for event in event_stats %}
+
+                    <tr>
+
+                        <td>
+                            {{ event[0] }}
+                        </td>
+
+                        <td>
+                            {{ event[1] }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="page-title">
+
+            <h2>🏆 Most Popular Event</h2>
+
+            <h1>
+                {{ most_popular }}
+            </h1>
+
+            <h2>📉 Least Popular Event</h2>
+
+            <h1>
+                {{ least_popular }}
+            </h1>
+
+        </div>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="page-title">
+            <h1>Registration Chart 📈</h1>
+        </div>
+
+        <div style="max-width: 800px; margin: auto;">
+            <canvas id="eventChart"></canvas>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+
+        <p>© 2026 CampusEvents</p>
+
+        <p>College Event Management System</p>
+
+    </footer>
+
+    <script>
+
+        const eventNames = {{ event_stats | map(attribute=0) | list | tojson }};
+
+        const registrationCounts =
+            {{ event_stats | map(attribute=1) | list | tojson }};
+
+
+        const ctx = document
+            .getElementById('eventChart')
+            .getContext('2d');
+
+
+        new Chart(ctx, {
+
+            type: 'bar',
+
+            data: {
+
+                labels: eventNames,
+
+                datasets: [{
+
+                    label: 'Number of Registrations',
+
+                    data: registrationCounts,
+
+                    borderWidth: 1
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                scales: {
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            stepSize: 1
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

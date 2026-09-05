@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Registrations - CampusEvents</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    {% include 'toast.html' %}
+
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🎓 CampusEvents
+        </div>
+
+        {% include "event_search_bar.html" %}
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">Home</a>
+            </li>
+
+            <li>
+                <a href="/events">Events</a>
+            </li>
+
+            <li>
+                <a href="/admin">Dashboard</a>
+            </li>
+
+            <li>
+                <a href="/profile">
+                    👤 Profile
+                </a>
+            </li>
+
+            <li>
+                <a href="/logout"
+                   class="btn btn-danger"
+                   style="padding: 6px 14px; font-size: 14px;">
+                    🚪 Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- MAIN CONTENT -->
+
+    <div class="container">
+
+        <div class="dashboard-grid registration-stats">
+
+            <div class="stat-card">
+                <h3>Total Registrations</h3>
+                <div class="number">{{ registrations|length }}</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Events With Registrations</h3>
+                <div class="number">
+                    {{ events_with_registrations }}
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Events</h3>
+                <div class="number">{{ events|length }}</div>
+            </div>
+
+        </div>
+
+        <div class="page-title">
+
+            <h1>👥 Student Registrations</h1>
+
+            <p>
+                View and manage all student event registrations.
+            </p>
+
+        </div>
+
+
+        <!-- SEARCH & FILTER -->
+
+        <div style="margin-bottom: 20px;">
+            <a href="/admin/export-registrations" class="btn btn-primary">
+                📥 Export Registrations
+            </a>
+        </div>
+
+        <div class="registration-controls">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="🔎 Search by name, college ID or email..."
+                onkeyup="filterRegistrations()">
+
+
+            <select
+                id="eventFilter"
+                onchange="filterRegistrations()">
+
+                <option value="">
+                    🎯 All Events
+                </option>
+
+                {% for event in events %}
+
+                <option value="{{ event[1] }}">
+                    {{ event[1] }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+
+        <!-- REGISTRATION TABLE -->
+
+        <div class="registration-table-container">
+
+            <table class="registration-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Student</th>
+
+                        <th>College ID</th>
+
+                        <th>Email</th>
+
+                        <th>Phone</th>
+
+                        <th>Event</th>
+
+                        <th>Registered On</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <div class="registration-result-count">
+                    Showing <strong id="visibleRegistrationCount">{{ registrations|length }}</strong>
+                    of <strong>{{ registrations|length }}</strong> registrations
+                </div>
+
+                <tbody id="registrationTable">
+
+                    {% for registration in registrations %}
+
+                    <tr>
+
+                        <td>
+                            {{ loop.index }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ registration[1] }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ registration[2] }}
+                        </td>
+
+                        <td>
+                            {{ registration[3] }}
+                        </td>
+
+                        <td>
+                            {{ registration[4] }}
+                        </td>
+
+                        <td>
+
+                            <span class="event-badge">
+                                {{ registration[5] }}
+                            </span>
+
+                        </td>
+
+                        <td>
+                            {{ registration[6] }}
+                        </td>
+
+                        <td>
+
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                onclick="openRegistrationDeleteModal(
+                                    {{ registration[0] }},
+                                    '{{ registration[1] | replace("'", "\\'") }}',
+                                    '{{ registration[5] | replace("'", "\\'") }}'
+                                )">
+
+                                🗑️ Remove
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="8"
+                            class="empty-table">
+
+                            📭 No registrations found.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="back-dashboard">
+
+            <a href="/admin"
+               class="btn">
+
+                ← Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- DELETE REGISTRATION MODAL -->
+
+    <div id="registrationDeleteModal"
+         class="modal-overlay">
+
+        <div class="delete-modal">
+
+            <div class="delete-icon">
+                ⚠️
+            </div>
+
+            <h2>
+                Remove Registration?
+            </h2>
+
+            <p>
+
+                Are you sure you want to remove
+
+                <strong id="registrationStudentName"></strong>
+
+                from
+
+                <strong id="registrationEventName"></strong>?
+
+            </p>
+
+            <p class="delete-warning">
+
+                This action cannot be undone.
+
+            </p>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn"
+                    onclick="closeRegistrationDeleteModal()">
+
+                    Cancel
+
+                </button>
+
+
+                <a
+                    id="confirmRegistrationDelete"
+                    href="#"
+                    class="btn btn-danger">
+
+                    Yes, Remove
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        function filterRegistrations() {
+            const search = document.getElementById("searchInput").value.toLowerCase();
+            const eventFilter = document.getElementById("eventFilter").value.toLowerCase();
+            const rows = document.querySelectorAll("#registrationTable tr");
+
+            let visibleCount = 0;
+
+            rows.forEach(function(row) {
+                const text = row.innerText.toLowerCase();
+                const eventCell = row.cells[5];
+
+                if (!eventCell) return;
+
+                const event = eventCell.innerText.toLowerCase();
+
+                const matchesSearch = text.includes(search);
+                const matchesEvent =
+                    eventFilter === "" || event === eventFilter;
+
+                if (matchesSearch && matchesEvent) {
+                    row.style.display = "";
+                    visibleCount++;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            document.getElementById("visibleRegistrationCount").textContent =
+                visibleCount;
+        }
+
+
+        function openRegistrationDeleteModal(
+            registrationId,
+            studentName,
+            eventName
+        ) {
+
+            document
+                .getElementById("registrationStudentName")
+                .textContent = studentName;
+
+            document
+                .getElementById("registrationEventName")
+                .textContent = eventName;
+
+            document
+                .getElementById("confirmRegistrationDelete")
+                .href =
+                "/admin/delete-registration/" +
+                registrationId;
+
+            document
+                .getElementById("registrationDeleteModal")
+                .classList.add("show");
+
+        }
+
+
+        function closeRegistrationDeleteModal() {
+
+            document
+                .getElementById("registrationDeleteModal")
+                .classList.remove("show");
+
+        }
+
+
+        document
+            .getElementById("registrationDeleteModal")
+            .addEventListener("click", function(event) {
+
+                if (event.target === this) {
+
+                    closeRegistrationDeleteModal();
+
+                }
+
+            });
+
+    </script>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <p>
+            © 2026 CampusEvents
+        </p>
+
+        <p>
+            Admin Dashboard
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

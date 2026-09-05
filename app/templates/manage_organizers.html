@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Manage Organizers</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            🎓 CampusEvents <span style="color: #666; font-size: 16px;">| Admin</span>
+        </div>
+        
+        {% include "event_search_bar.html" %}
+        
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/events">🎉 Events</a></li>
+            <li>
+                <a href="/profile">
+                    👤 Profile
+                </a>
+            </li>
+            <li>
+                <a href="/admin-logout" class="btn btn-danger" style="padding: 6px 14px; font-size: 14px;">
+                    🚪 Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+<div class="container">
+
+    <div class="dashboard-card">
+
+        <div style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        ">
+
+            <div>
+
+                <h2>👥 Manage Organizers</h2>
+
+                <p>
+                    Review organizer registration requests and manage
+                    existing organizers.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('admin') }}"
+                class="btn btn-secondary"
+            >
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Pending / Previous Requests -->
+
+    <div class="dashboard-card">
+
+        <h3>📋 Organizer Requests</h3>
+
+        {% if requests %}
+
+        <div style="overflow-x: auto;">
+
+            <table style="width: 100%; border-collapse: collapse;">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Status</th>
+                        <th>Requested At</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for request in requests %}
+
+                    <tr>
+
+                        <td>{{ request[0] }}</td>
+
+                        <td>
+                            <strong>{{ request[1] }}</strong>
+                        </td>
+
+                        <td>
+
+                            {% if request[2] == "pending" %}
+
+                                <span>⏳ Pending</span>
+
+                            {% elif request[2] == "approved" %}
+
+                                <span>✅ Approved</span>
+
+                            {% elif request[2] == "rejected" %}
+
+                                <span>❌ Rejected</span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+                            {{ request[3] }}
+                        </td>
+
+                        <td>
+
+                            {% if request[2] == "pending" %}
+
+                            <a
+                                href="{{ url_for(
+                                    'approve_organizer',
+                                    request_id=request[0]
+                                ) }}"
+                                class="btn btn-primary"
+                            >
+                                ✅ Approve
+                            </a>
+
+                            <a
+                                href="{{ url_for(
+                                    'reject_organizer',
+                                    request_id=request[0]
+                                ) }}"
+                                class="btn btn-danger"
+                            >
+                                ❌ Reject
+                            </a>
+
+                            {% else %}
+
+                                <span>—</span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <p>
+            No organizer requests found.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- Current Organizers -->
+
+    <div class="dashboard-card">
+
+        <h3>👤 Current Organizers</h3>
+
+        {% if organizers %}
+
+        <div style="overflow-x: auto;">
+
+            <table style="width: 100%; border-collapse: collapse;">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Status</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for organizer in organizers %}
+
+                    <tr>
+
+                        <td>
+                            {{ organizer[0] }}
+                        </td>
+
+                        <td>
+                            <strong>{{ organizer[1] }}</strong>
+                        </td>
+
+                        <td>
+                            {% if organizer[3] == 'active' %}
+                                <span style="color: green;">🟢 Active</span>
+                            {% else %}
+                                <span style="color: red;">🔴 Inactive</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+
+                            {% if organizer[3] == 'active' %}
+
+                                <a
+                                    href="{{ url_for('toggle_organizer_status', organizer_id=organizer[0]) }}"
+                                    class="btn btn-danger"
+                                >
+                                    Deactivate
+                                </a>
+
+                            {% else %}
+
+                                <a
+                                    href="{{ url_for('toggle_organizer_status', organizer_id=organizer[0]) }}"
+                                    class="btn btn-primary"
+                                >
+                                    Activate
+                                </a>
+
+                            {% endif %}
+
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                onclick="openDeleteModal(
+                                    '{{ organizer[0] }}',
+                                    '{{ organizer[1] }}'
+                                )"
+                            >
+                                🗑️ Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <p>
+            No organizers currently exist.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% include "toast.html" %}
+
+<!-- Delete Organizer Modal -->
+<div id="deleteModal" class="delete-modal">
+    <div class="delete-modal-content">
+
+        <div class="delete-icon">
+            🗑️
+        </div>
+
+        <h2>Delete Organizer?</h2>
+
+        <p>
+            Are you sure you want to permanently delete
+            <strong id="deleteOrganizerName"></strong>?
+        </p>
+
+        <p class="delete-warning">
+            This action cannot be undone.
+        </p>
+
+        <div class="delete-modal-buttons">
+
+            <button
+                type="button"
+                class="cancel-delete"
+                onclick="closeDeleteModal()"
+            >
+                Cancel
+            </button>
+
+            <a
+                id="confirmDeleteButton"
+                href="#"
+                class="confirm-delete"
+            >
+                Yes, Delete
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+<style>
+.delete-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-modal-content {
+    background: white;
+    width: 420px;
+    max-width: 90%;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: deleteModalAnimation 0.2s ease;
+}
+
+.delete-icon {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+.delete-modal-content h2 {
+    margin-bottom: 10px;
+}
+
+.delete-modal-content p {
+    color: #555;
+    font-size: 16px;
+}
+
+.delete-warning {
+    color: #dc3545 !important;
+    font-size: 14px !important;
+    font-weight: bold;
+}
+
+.delete-modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.cancel-delete,
+.confirm-delete {
+    padding: 10px 20px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.cancel-delete {
+    background: #e9ecef;
+    color: #333;
+}
+
+.confirm-delete {
+    background: #dc3545;
+    color: white;
+}
+
+.cancel-delete:hover {
+    background: #d6d8db;
+}
+
+.confirm-delete:hover {
+    background: #bb2d3b;
+}
+
+@keyframes deleteModalAnimation {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+</style>
+
+<script>
+function openDeleteModal(organizerId, organizerName) {
+
+    document.getElementById("deleteOrganizerName").textContent =
+        organizerName;
+
+    document.getElementById("confirmDeleteButton").href =
+        "/admin/organizers/delete/" + organizerId;
+
+    document.getElementById("deleteModal").style.display = "flex";
+}
+
+function closeDeleteModal() {
+
+    document.getElementById("deleteModal").style.display = "none";
+}
+
+/* Close when clicking outside the modal */
+window.onclick = function(event) {
+
+    const modal = document.getElementById("deleteModal");
+
+    if (event.target === modal) {
+        closeDeleteModal();
+    }
+};
+</script>
+
+</body>
+
+</html>

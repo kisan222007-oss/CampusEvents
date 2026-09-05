@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - CampusEvents</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    {% include 'toast.html' %}
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🎓 CampusEvents <span style="color: #666; font-size: 16px;">| Admin</span>
+        </div>
+
+        {% include "event_search_bar.html" %}
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">Home</a>
+            </li>
+
+            <li>
+                <a href="/events">Events</a>
+            </li>
+
+            <li>
+                <a href="/admin">Dashboard</a>
+            </li>
+
+            <li>
+                <a href="/admin/registrations">
+                    👥 Registrations
+                </a>
+            </li>
+
+            <li>
+                <a href="/search">
+                    🔎 Search Student
+                </a>
+            </li>
+
+            <li>
+                <a href="/analysis">
+                    📊 Analysis
+                </a>
+            </li>
+
+            <li>
+                <a href="/profile">
+                    👤 Profile
+                </a>
+            </li>
+
+            <li>
+                <a href="/logout"
+                   class="btn btn-danger"
+                   style="padding: 6px 14px; font-size: 14px;">
+                    🚪 Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <!-- DASHBOARD -->
+
+    <div class="container">
+
+        <div class="page-title">
+
+            <h1>Admin Dashboard 📊</h1>
+
+            <p>
+                Monitor college events and student registrations.
+            </p>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <div class="dashboard-grid">
+
+            <div class="stat-card">
+
+                <h3>Total Registrations</h3>
+
+                <div class="number">
+                    {{ total_registrations }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>Total Events</h3>
+
+                <div class="number">
+                    {{ total_events }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>Most Popular Event</h3>
+
+                <div class="number">
+                    {{ popular_event }}
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <h3>Events With Registrations</h3>
+
+                <div class="number">
+                    {{ events_with_registrations }}
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>Events Without Registrations</h3>
+
+                <div class="number">
+                    {{ events_without_registrations }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- EVENT STATISTICS -->
+
+        <div class="admin-actions" style="margin-bottom: 40px;">
+
+            <a href="/analysis" class="btn btn-primary">
+                📊 View Analysis
+            </a>
+
+            <a href="/search" class="btn btn-primary">
+                🔎 Search Student
+            </a>
+
+            <a href="/admin/registrations" class="btn btn-primary">
+                👥 Manage Registrations
+            </a>
+
+            {% if session.get("admin_role") == "main_admin" %}
+
+            <a
+                href="{{ url_for('manage_organizers') }}"
+                class="btn btn-primary"
+            >
+                👥 Manage Organizers
+            </a>
+
+            {% endif %}
+
+        </div>
+
+        <div class="admin-events-section">
+
+            <div class="section-header">
+
+                <div>
+                    <h2>📅 Manage Events</h2>
+                    <p>View and manage all college events.</p>
+                </div>
+
+                <a href="/add-event" class="btn btn-primary">
+                    ➕ Add Event
+                </a>
+
+            </div>
+
+
+            <div class="events-grid">
+
+                {% for event in events %}
+
+                <div class="event-card">
+
+                    <h2>
+                        🎉 {{ event[1] }}
+                    </h2>
+
+                    <p>
+                        📅 {{ event[3] }}
+                    </p>
+
+                    <p>
+                        📍 {{ event[4] }}
+                    </p>
+
+                    <p>
+                        {{ event[2] }}
+                    </p>
+
+                    <div class="event-registration-count">
+
+                        👥
+                        <strong>{{ event[5] }}</strong>
+
+                        {% if event[5] == 1 %}
+                            student registered
+                        {% else %}
+                            students registered
+                        {% endif %}
+
+                    </div>
+
+                    <div class="event-actions">
+
+                        <a
+                            href="/admin/registrations?event={{ event[1] | urlencode }}"
+                            class="btn btn-primary">
+                            👥 View Registrations
+                        </a>
+
+                        <a
+                            href="/edit-event/{{ event[0] }}"
+                            class="btn">
+
+                            ✏️ Edit
+
+                        </a>
+
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            onclick="openDeleteModal(
+                                {{ event[0] }},
+                                '{{ event[1] | replace("'", "\\'") }}',
+                                {{ event[5] }}
+                            )">
+
+                            🗑️ Delete
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {% else %}
+
+                <div class="empty-state">
+
+                    <h2>📭 No Events</h2>
+
+                    <p>No events have been created yet.</p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <p>
+            © 2026 CampusEvents
+        </p>
+
+        <p>
+            Admin Dashboard
+        </p>
+
+    </footer>
+
+    <!-- DELETE EVENT MODAL -->
+
+    <div id="deleteModal" class="modal-overlay">
+
+        <div class="delete-modal">
+
+            <div class="delete-icon">
+                🗑️
+            </div>
+
+            <h2>Delete Event?</h2>
+
+            <p>
+                Are you sure you want to delete
+                <strong id="deleteEventName"></strong>?
+            </p>
+
+            <div id="registrationWarning"
+                 class="registration-warning">
+
+                ⚠️
+                <strong id="registrationCount"></strong>
+                students are currently registered for this event.
+
+                <br><br>
+
+                Deleting this event will also remove
+                all of these registrations.
+
+            </div>
+
+            <p class="delete-warning">
+                This action cannot be undone.
+            </p>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="btn"
+                    onclick="closeDeleteModal()">
+
+                    Cancel
+
+                </button>
+
+                <a
+                    id="confirmDeleteButton"
+                    href="#"
+                    class="btn btn-danger">
+
+                    Yes, Delete
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+    function openDeleteModal(eventId, eventName, registrationCount) {
+
+        document.getElementById("deleteEventName").textContent =
+            eventName;
+
+        document.getElementById("registrationCount").textContent =
+            registrationCount;
+
+        document.getElementById("confirmDeleteButton").href =
+            "/delete-event/" + eventId;
+
+        document.getElementById("deleteModal").classList.add("show");
+
+    }
+
+
+    function closeDeleteModal() {
+
+        document.getElementById("deleteModal").classList.remove("show");
+
+    }
+
+
+    document.getElementById("deleteModal").addEventListener("click", function(event) {
+
+        if (event.target === this) {
+
+            closeDeleteModal();
+
+        }
+
+    });
+
+    </script>
+
+</body>
+
+</html>

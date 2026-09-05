@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Search Student - CampusEvents</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    {% include 'toast.html' %}
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🎓 CampusEvents
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/events">Events</a></li>
+            <li><a href="/admin">Dashboard</a></li>
+        </ul>
+
+    </nav>
+
+
+    <div class="container">
+
+        <div class="page-title">
+
+            <h1>Search Student 🔎</h1>
+
+            <p>Search registration details using College ID.</p>
+
+        </div>
+
+
+        <form action="/search" method="POST">
+
+            <div class="form-group">
+
+                <label>College ID</label>
+
+                <input
+                    type="text"
+                    name="college_id"
+                    placeholder="Enter College ID"
+                    required>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-primary">
+
+                Search
+
+            </button>
+
+        </form>
+
+
+        {% if searched %}
+
+            {% if registrations %}
+
+                <div class="stat-card" style="max-width: 300px; margin: 0 auto 30px auto;">
+
+                    <h3>Total Registered Events</h3>
+
+                    <div class="number">
+                        {{ total_registrations }}
+                    </div>
+
+                </div>
+
+                <h2>Student Registrations 🎟️</h2>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Name</th>
+                                <th>College ID</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Event</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for registration in registrations %}
+
+                            <tr>
+
+                                <td>
+                                    {{ registration[1] }}
+                                </td>
+
+                                <td>
+                                    {{ registration[2] }}
+                                </td>
+
+                                <td>
+                                    {{ registration[3] }}
+                                </td>
+
+                                <td>
+                                    {{ registration[4] }}
+                                </td>
+
+                                <td>
+                                    {{ registration[5] }}
+                                </td>
+
+                                <td>
+
+                                    <form
+                                        action="/cancel-registration/{{ registration[0] }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Cancel this registration?');">
+
+                                        <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 13px;">
+                                            Cancel
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <h2>❌ Student not found.</h2>
+
+            {% endif %}
+
+        {% endif %}
+
+    </div>
+
+
+    <footer class="footer">
+
+        <p>© 2026 CampusEvents</p>
+
+    </footer>
+
+</body>
+
+</html>

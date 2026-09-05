@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CampusEvents - College Event Management</title>
+
+    <!-- Connect CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    {% include 'toast.html' %}
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🎓 CampusEvents
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="/">Home</a>
+            </li>
+
+            <li>
+                <a href="/events">🎉 Events</a>
+            </li>
+
+            {% if session.get("student_logged_in") %}
+
+                <li>
+                    <a href="/my-events">🎟️ My Events</a>
+                </li>
+
+                <li>
+                    <a href="/student-dashboard">Dashboard</a>
+                </li>
+
+                <li>
+                    <a href="/profile">👤 Profile</a>
+                </li>
+
+                <li>
+                    <a href="/student-logout"
+                       class="btn btn-danger"
+                       style="padding: 6px 14px; font-size: 14px;">
+                        🚪 Logout
+                    </a>
+                </li>
+
+            {% elif session.get("admin_logged_in") %}
+
+                <li>
+                    <a href="/admin">📊 Dashboard</a>
+                </li>
+
+                <li>
+                    <a href="/admin/registrations">👥 Registrations</a>
+                </li>
+
+                <li>
+                    <a href="/search">🔎 Search Student</a>
+                </li>
+
+                <li>
+                    <a href="/analysis">📊 Analysis</a>
+                </li>
+
+                <li>
+                    <a href="/profile">👤 Profile</a>
+                </li>
+
+                <li>
+                    <a href="/logout"
+                       class="btn btn-danger"
+                       style="padding: 6px 14px; font-size: 14px;">
+                        🚪 Logout
+                    </a>
+                </li>
+
+            {% else %}
+
+                <li>
+                    <a href="/student-login">🎓 Student Login</a>
+                </li>
+
+                <li>
+                    <a href="/login">🔐 Admin Login</a>
+                </li>
+
+            {% endif %}
+
+        </ul>
+
+    </nav>
+
+
+    <!-- ================= HERO SECTION ================= -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                College Events,
+                All In One Place 🎉
+            </h1>
+
+            <p>
+                Discover upcoming college events,
+                register easily and manage your
+                participation from one platform.
+            </p>
+
+            <a href="/events" class="btn btn-primary">
+                Explore Events
+            </a>
+
+        </div>
+
+    </section>
+
+{% if trending_event %}
+<div class="container" style="padding: 20px;">
+
+    <div class="trending-event">
+
+        <div class="trending-icon">
+            🔥
+        </div>
+
+        <div class="trending-info">
+            <span class="trending-label">TRENDING NOW</span>
+
+            <h3>{{ trending_event[1] }}</h3>
+
+            <p>
+                📅 {{ trending_event[3] }}
+                &nbsp; • &nbsp;
+                📍 {{ trending_event[4] }}
+                &nbsp; • &nbsp;
+                👥 {{ trending_event[5] }} registered
+            </p>
+        </div>
+
+        <a href="/events" class="btn btn-primary trending-btn">
+            Explore →
+        </a>
+
+    </div>
+
+</div>
+{% endif %}
+    <!-- ================= USER STATUS ================= -->
+
+    <div class="container" style="padding-top: 40px; padding-bottom: 20px;">
+
+        {% if session.get("student_logged_in") %}
+
+            <div class="dashboard-card" style="text-align: center;">
+
+                <h2>🎓 Welcome, {{ session.get("student_name") }}!</h2>
+
+                <p style="font-size: 18px; margin-top: 10px;">
+                    <strong>College ID:</strong>
+                    {{ session.get("student_college_id") }}
+                </p>
+
+                <div style="margin-top: 20px;">
+
+                    <a href="/my-events" class="btn btn-primary">
+                        🎟️ My Events
+                    </a>
+
+                    <a href="/student-dashboard" class="btn">
+                        📊 Dashboard
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% elif session.get("admin_logged_in") %}
+
+            <div class="dashboard-card" style="text-align: center;">
+
+                <h2>👨💼 Admin Logged In</h2>
+
+                <p style="font-size: 18px; margin-top: 10px;">
+                    Manage events, registrations and analytics.
+                </p>
+
+                <a href="/admin" class="btn btn-primary" style="margin-top: 15px;">
+                    📊 Go to Admin Dashboard
+                </a>
+
+            </div>
+
+        {% else %}
+
+            <div class="login-options dashboard-grid">
+
+                <a href="/student-login" class="dashboard-card">
+
+                    <h2>🎓</h2>
+
+                    <h3>Student Login</h3>
+
+                    <p>
+                        Login to register and manage your events.
+                    </p>
+
+                </a>
+
+                <a href="/login" class="dashboard-card">
+
+                    <h2>🔐</h2>
+
+                    <h3>Admin Login</h3>
+
+                    <p>
+                        Manage events, registrations and analytics.
+                    </p>
+
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- ================= FEATURES ================= -->
+
+    <div class="container">
+
+        <div class="page-title">
+
+            <h1>
+                Everything You Need
+            </h1>
+
+            <p>
+                Manage and participate in college events easily.
+            </p>
+
+        </div>
+
+
+        <div class="event-grid">
+
+
+            <!-- FEATURE 1 -->
+
+            <div class="event-card">
+
+                <h2>
+                    🔍 Discover Events
+                </h2>
+
+                <p>
+                    Find hackathons, workshops,
+                    cultural events, sports and
+                    technical competitions.
+                </p>
+
+                <a href="/events" class="btn btn-primary">
+                    View Events
+                </a>
+
+            </div>
+
+
+
+
+
+            <!-- FEATURE 3 -->
+
+            <div class="event-card">
+
+                <h2>
+                    📊 Track Events
+                </h2>
+
+                <p>
+                    Keep track of all the events
+                    you have registered for.
+                </p>
+
+                <a href="/login" class="btn btn-primary">
+                    My Events
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <p>
+            © 2026 CampusEvents
+        </p>
+
+        <p>
+            College Event Management System
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

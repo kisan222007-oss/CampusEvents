@@ -1,0 +1,26 @@
+<!-- GLOBAL EVENT SEARCH BAR -->
+
+<div class="global-search-wrapper">
+
+    <form
+        action="{{ url_for('event_search') }}"
+        method="GET"
+        class="global-search-form"
+    >
+
+        <span class="global-search-icon">🔍</span>
+
+        <input
+            type="text"
+            name="q"
+            placeholder="Search events or organizers..."
+            autocomplete="off"
+        >
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+</div>

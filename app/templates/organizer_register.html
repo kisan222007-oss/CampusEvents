@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Organizer Registration</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="container" style="max-width: 500px; margin: 80px auto;">
+
+        <div class="dashboard-card">
+
+            <h2>👤 Organizer Registration</h2>
+
+            <p>
+                Create an organizer account to manage your college events.
+            </p>
+
+            <form
+                method="POST"
+                action="{{ url_for('organizer_register') }}"
+            >
+
+                <div class="form-group">
+
+                    <label>Username</label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Enter organizer username"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter password"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Confirm Password</label>
+
+                    <input
+                        type="password"
+                        name="confirm_password"
+                        placeholder="Confirm password"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="width: 100%;"
+                >
+                    👤 Create Organizer Account
+                </button>
+
+            </form>
+
+            <div style="text-align: center; margin-top: 20px;">
+
+                <a href="{{ url_for('login') }}">
+                    ← Back to Admin Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% include "toast.html" %}
+
+</body>
+
+</html>
