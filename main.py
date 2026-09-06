@@ -310,7 +310,7 @@ def register():
             name,
             college_id,
             email,
-            phone,
+            phone[:15],
             event
         ))
 
@@ -2853,10 +2853,10 @@ def register_event(event_id):
         (name, college_id, email, phone, event)
         VALUES (%s, %s, %s, %s, %s)
     """, (
-        student[0],
-        student[1],
-        student[2],
-        student[3],
+        student[0] or "Unknown",
+        student[1] or "Unknown",
+        student[2] or "No Email",
+        (student[3] or "No Phone")[:15],
         event_name
     ))
 
