@@ -17,27 +17,28 @@
         href="{{ url_for('static', filename='css/style.css') }}"
     >
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <nav class="navbar">
         <div class="logo">
-            🎓 CampusEvents <span style="color: #666; font-size: 16px;">| Admin</span>
+            <i class="fa-solid fa-graduation-cap"></i> RAIT Events <span style="color: #666; font-size: 16px;">| Admin</span>
         </div>
         
         {% include "event_search_bar.html" %}
         
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
-            <li><a href="/events">🎉 Events</a></li>
+            <li><a href="/events"><i class="fa-solid fa-calendar-check"></i> Events</a></li>
             <li>
                 <a href="/profile">
-                    👤 Profile
+                    <i class="fa-solid fa-user"></i> Profile
                 </a>
             </li>
             <li>
-                <a href="/admin-logout" class="btn btn-danger" style="padding: 6px 14px; font-size: 14px;">
-                    🚪 Logout
+                <a href="/logout" class="btn btn-danger" style="padding: 6px 14px; font-size: 14px;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
                 </a>
             </li>
         </ul>
@@ -57,7 +58,7 @@
 
             <div>
 
-                <h2>👥 Manage Organizers</h2>
+                <h2><i class="fa-solid fa-users"></i> Manage Organizers</h2>
 
                 <p>
                     Review organizer registration requests and manage
@@ -82,7 +83,7 @@
 
     <div class="dashboard-card">
 
-        <h3>📋 Organizer Requests</h3>
+        <h3><i class="fa-solid fa-clipboard-list"></i> Organizer Requests</h3>
 
         {% if requests %}
 
@@ -124,11 +125,11 @@
 
                             {% elif request[2] == "approved" %}
 
-                                <span>✅ Approved</span>
+                                <span><i class="fa-solid fa-circle-check"></i> Approved</span>
 
                             {% elif request[2] == "rejected" %}
 
-                                <span>❌ Rejected</span>
+                                <span><i class="fa-solid fa-circle-xmark"></i> Rejected</span>
 
                             {% endif %}
 
@@ -149,7 +150,7 @@
                                 ) }}"
                                 class="btn btn-primary"
                             >
-                                ✅ Approve
+                                <i class="fa-solid fa-circle-check"></i> Approve
                             </a>
 
                             <a
@@ -159,7 +160,7 @@
                                 ) }}"
                                 class="btn btn-danger"
                             >
-                                ❌ Reject
+                                <i class="fa-solid fa-circle-xmark"></i> Reject
                             </a>
 
                             {% else %}
@@ -195,7 +196,7 @@
 
     <div class="dashboard-card">
 
-        <h3>👤 Current Organizers</h3>
+        <h3><i class="fa-solid fa-user"></i> Current Organizers</h3>
 
         {% if organizers %}
 

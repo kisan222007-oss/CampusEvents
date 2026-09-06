@@ -8,11 +8,12 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Manage Registrations - CampusEvents</title>
+    <title>Manage Registrations - RAIT Events</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -25,7 +26,7 @@
     <nav class="navbar">
 
         <div class="logo">
-            🎓 CampusEvents
+            <i class="fa-solid fa-graduation-cap"></i> RAIT Events
         </div>
 
         {% include "event_search_bar.html" %}
@@ -46,7 +47,7 @@
 
             <li>
                 <a href="/profile">
-                    👤 Profile
+                    <i class="fa-solid fa-user"></i> Profile
                 </a>
             </li>
 
@@ -54,7 +55,7 @@
                 <a href="/logout"
                    class="btn btn-danger"
                    style="padding: 6px 14px; font-size: 14px;">
-                    🚪 Logout
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
                 </a>
             </li>
 
@@ -90,7 +91,7 @@
 
         <div class="page-title">
 
-            <h1>👥 Student Registrations</h1>
+            <h1><i class="fa-solid fa-users"></i> Student Registrations</h1>
 
             <p>
                 View and manage all student event registrations.
@@ -112,7 +113,7 @@
             <input
                 type="text"
                 id="searchInput"
-                placeholder="🔎 Search by name, college ID or email..."
+                placeholder="Search by name, college ID or email..."
                 onkeyup="filterRegistrations()">
 
 
@@ -275,7 +276,7 @@
         <div class="delete-modal">
 
             <div class="delete-icon">
-                ⚠️
+                <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
 
             <h2>
@@ -421,7 +422,7 @@
     <footer class="footer">
 
         <p>
-            © 2026 CampusEvents
+            © 2026 RAIT Events | RAIT, DY Patil University Campus, Nerul, Navi Mumbai
         </p>
 
         <p>

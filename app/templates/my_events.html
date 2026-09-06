@@ -13,6 +13,7 @@
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -21,7 +22,7 @@
     <nav class="navbar">
 
         <div class="logo">
-            🎓 CampusEvents
+            <i class="fa-solid fa-graduation-cap"></i> RAIT Events
         </div>
 
         {% include "event_search_bar.html" %}
@@ -33,11 +34,11 @@
             </li>
 
             <li>
-                <a href="/events">🎉 Events</a>
+                <a href="/events"><i class="fa-solid fa-calendar-check"></i> Events</a>
             </li>
 
             <li>
-                <a href="/my-events">🎟️ My Events</a>
+                <a href="/my-events"><i class="fa-solid fa-ticket"></i> My Events</a>
             </li>
 
             <li>
@@ -46,14 +47,14 @@
 
             {% if session.get("student_logged_in") %}
             <li>
-                <a href="/profile">👤 Profile</a>
+                <a href="/profile"><i class="fa-solid fa-user"></i> Profile</a>
             </li>
 
             <li>
                 <a href="/student-logout"
                    class="btn btn-danger"
                    style="padding: 6px 14px; font-size: 14px;">
-                    🚪 Logout
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
                 </a>
             </li>
             {% endif %}
@@ -68,7 +69,7 @@
 
             <div>
 
-                <h1>🎟️ My Registrations</h1>
+                <h1><i class="fa-solid fa-ticket"></i> My Registrations</h1>
 
                 <p>
                     Your registered college events
@@ -97,11 +98,11 @@
                 <div>
 
                     <h2>
-                        🎉 {{ registration[2] }}
+                        <i class="fa-solid fa-calendar-check"></i> {{ registration[2] }}
                     </h2>
 
                     <p>
-                        👤 {{ registration[1] }}
+                        <i class="fa-solid fa-user"></i> {{ registration[1] }}
                     </p>
 
                     <p>
@@ -109,7 +110,7 @@
                     </p>
 
                     <p>
-                        📅 Registered:
+                        <i class="fa-solid fa-calendar"></i> Registered:
                         {{ registration[3] }}
                     </p>
 
@@ -132,7 +133,7 @@
                                 '{{ registration[2] | replace("'", "\\'") }}'
                             )">
 
-                            ❌ Cancel
+                            <i class="fa-solid fa-circle-xmark"></i> Cancel
 
                         </button>
 
@@ -176,7 +177,7 @@
         <div class="delete-modal">
 
             <div class="delete-icon">
-                ⚠️
+                <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
 
             <h2>Cancel Registration?</h2>

@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student Registration - CampusEvents</title>
+    <title>Student Registration - RAIT Events</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -17,7 +18,7 @@
     <nav class="navbar">
 
         <div class="logo">
-            🎓 CampusEvents
+            <i class="fa-solid fa-graduation-cap"></i> RAIT Events
         </div>
 
         <ul class="nav-links">
@@ -27,11 +28,11 @@
             </li>
 
             <li>
-                <a href="/events">🎉 Events</a>
+                <a href="/events"><i class="fa-solid fa-calendar-check"></i> Events</a>
             </li>
 
             <li>
-                <a href="/student-login">🔐 Student Login</a>
+                <a href="/student-login"><i class="fa-solid fa-lock"></i> Student Login</a>
             </li>
 
         </ul>
@@ -41,7 +42,7 @@
 
     <div class="form-container">
 
-        <h1>📝 Create Student Account</h1>
+        <h1><i class="fa-solid fa-pen-to-square"></i> Create Student Account</h1>
 
         <p>
             Create your account to register for college events.
@@ -191,7 +192,7 @@
             <button
                 type="submit"
                 class="btn btn-primary">
-                🎓 Create Account
+                <i class="fa-solid fa-graduation-cap"></i> Create Account
             </button>
 
         </form>
@@ -206,7 +207,7 @@
             <a
                 href="{{ url_for('student_login', next=request.args.get('next')) }}"
                 class="btn btn-secondary">
-                🔐 Student Login
+                <i class="fa-solid fa-lock"></i> Student Login
             </a>
 
         </div>
@@ -217,7 +218,7 @@
     <footer class="footer">
 
         <p>
-            © 2026 CampusEvents
+            © 2026 RAIT Events | RAIT, DY Patil University Campus, Nerul, Navi Mumbai
         </p>
 
     </footer>

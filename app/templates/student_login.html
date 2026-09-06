@@ -11,6 +11,7 @@
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -19,7 +20,7 @@
     <nav class="navbar">
 
         <div class="logo">
-            🎓 CampusEvents
+            <i class="fa-solid fa-graduation-cap"></i> RAIT Events
         </div>
 
         {% include "event_search_bar.html" %}
@@ -31,13 +32,13 @@
             </li>
 
             <li>
-                <a href="/events">🎉 Events</a>
+                <a href="/events"><i class="fa-solid fa-calendar-check"></i> Events</a>
             </li>
 
             {% if session.get("student_logged_in") %}
 
             <li>
-                <a href="/my-events">🎟️ My Events</a>
+                <a href="/my-events"><i class="fa-solid fa-ticket"></i> My Events</a>
             </li>
 
             <li>
@@ -48,14 +49,14 @@
                 <a href="/student-logout"
                    class="btn btn-danger"
                    style="padding: 6px 14px; font-size: 14px;">
-                    🚪 Logout
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
                 </a>
             </li>
 
             {% else %}
 
             <li>
-                <a href="/student-login">🔐 Student Login</a>
+                <a href="/student-login"><i class="fa-solid fa-lock"></i> Student Login</a>
             </li>
 
             {% endif %}
@@ -69,7 +70,7 @@
         <div class="login-card">
 
             <div class="login-icon">
-                🎓
+                <i class="fa-solid fa-graduation-cap"></i>
             </div>
 
             <h1>Student Login</h1>
@@ -129,7 +130,7 @@
                     value="{{ next_page or '' }}">
 
                 <button type="submit" class="btn btn-primary login-btn">
-                    🔐 Login
+                    <i class="fa-solid fa-lock"></i> Login
                 </button>
 
                 <p style="text-align: center; margin-top: 15px;">
@@ -145,7 +146,7 @@
                 <a
                     href="{{ url_for('student_register', next=request.args.get('next')) }}"
                     class="btn btn-secondary">
-                    📝 Create Account
+                    <i class="fa-solid fa-pen-to-square"></i> Create Account
                 </a>
             </div>
 

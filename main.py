@@ -240,9 +240,10 @@ def events():
     cursor = db.cursor()
 
     cursor.execute("""
-        SELECT id, name, description, event_date, location
-        FROM events
-        ORDER BY event_date ASC
+        SELECT e.id, e.name, e.description, e.event_date, e.location, a.username
+        FROM events e
+        LEFT JOIN admins a ON e.created_by = a.id
+        ORDER BY e.event_date ASC
     """)
 
     events = cursor.fetchall()
@@ -313,7 +314,7 @@ def register():
         cursor.close()
         db.close()
 
-        flash("Registration successful! 🎉", "success")
+        flash("Registration successful! <i class='fa-solid fa-calendar-check'></i>", "success")
 
         return redirect(url_for("register"))
 
@@ -479,7 +480,7 @@ def admin_forgot_password():
         try:
 
             msg = Message(
-                subject="CampusEvents Password Reset OTP",
+                subject="RAIT Events Password Reset OTP",
                 sender=app.config["MAIL_USERNAME"],
                 recipients=[admin_email]
             )
@@ -487,7 +488,7 @@ def admin_forgot_password():
             msg.body = f"""
 Hello {username},
 
-Your CampusEvents password reset OTP is:
+Your RAIT Events password reset OTP is:
 
 {otp}
 
@@ -496,7 +497,7 @@ This OTP is valid for 10 minutes.
 If you did not request a password reset, please ignore this email.
 
 Regards,
-CampusEvents Team
+RAIT Events Team
 """
 
             mail.send(msg)
@@ -531,7 +532,7 @@ CampusEvents Team
         session["admin_reset_id"] = admin_id
 
         flash(
-            "OTP sent successfully to your registered email. 📧",
+            "OTP sent successfully to your registered email. <i class='fa-solid fa-envelope'></i>",
             "success"
         )
 
@@ -632,7 +633,7 @@ def admin_verify_otp():
         session.pop("admin_reset_id", None)
 
         flash(
-            "OTP verified successfully! 🔐",
+            "OTP verified successfully! <i class='fa-solid fa-lock'></i>",
             "success"
         )
 
@@ -691,7 +692,7 @@ def admin_reset_password():
         session.pop("admin_otp_verified_id", None)
 
         flash(
-            "Password reset successfully! You can now login. 🔐",
+            "Password reset successfully! You can now login. <i class='fa-solid fa-lock'></i>",
             "success"
         )
 
@@ -932,7 +933,7 @@ def profile():
             db.close()
 
             flash(
-                "Profile updated successfully! ✅",
+                "Profile updated successfully! <i class='fa-solid fa-circle-check'></i>",
                 "success"
             )
 
@@ -1016,7 +1017,7 @@ def profile():
         db.close()
 
         flash(
-            "Profile updated successfully! ✅",
+            "Profile updated successfully! <i class='fa-solid fa-circle-check'></i>",
             "success"
         )
 
@@ -1721,7 +1722,7 @@ def add_event():
         db.close()
 
         flash(
-            f"Event '{name}' created successfully! 🎉",
+            f"Event '{name}' created successfully! <i class='fa-solid fa-calendar-check'></i>",
             "success"
         )
 
@@ -2258,7 +2259,7 @@ def student_login():
         session["student_college_id"] = student[2]
 
         flash(
-            f"Welcome back, {student[1]}! 🎓",
+            f"Welcome back, {student[1]}! <i class='fa-solid fa-graduation-cap'></i>",
             "success"
         )
 
@@ -2523,7 +2524,7 @@ def reset_password():
         db.close()
 
         flash(
-            "Password updated successfully! 🔐 Please login.",
+            "Password updated successfully! <i class='fa-solid fa-lock'></i> Please login.",
             "success"
         )
 
@@ -2649,7 +2650,7 @@ def student_register():
         session["student_college_id"] = college_id
 
         flash(
-            f"Account created successfully! Welcome {name}! 🎉",
+            f"Account created successfully! Welcome {name}! <i class='fa-solid fa-calendar-check'></i>",
             "success"
         )
 
@@ -2699,7 +2700,7 @@ def student_register():
                         db.commit()
 
                         flash(
-                            f"Successfully registered for {event_name}! 🎉",
+                            f"Successfully registered for {event_name}! <i class='fa-solid fa-calendar-check'></i>",
                             "success"
                         )
 
@@ -2865,14 +2866,14 @@ def register_event(event_id):
     if student[2]:
         try:
             msg = Message(
-                subject=f"CampusEvents Registration Confirmation - {event_name}",
+                subject=f"RAIT Events Registration Confirmation - {event_name}",
                 recipients=[student[2]]
             )
 
             msg.body = f"""
 Hello {student[0]},
 
-Your registration for the following CampusEvents event has been confirmed successfully! 🎉
+Your registration for the following RAIT Events event has been confirmed successfully! <i class='fa-solid fa-calendar-check'></i>
 
 Event: {event_name}
 
@@ -2881,7 +2882,7 @@ You are now officially registered for this event.
 Please keep this email for your records.
 
 Regards,
-CampusEvents
+RAIT Events
 """
 
             mail.send(msg)
@@ -2890,7 +2891,7 @@ CampusEvents
             print("Registration email error:", e)
 
     flash(
-        f"Successfully registered for {event_name}! 🎉",
+        f"Successfully registered for {event_name}! <i class='fa-solid fa-calendar-check'></i>",
         "success"
     )
 
@@ -2988,7 +2989,7 @@ def approve_organizer(request_id):
     db.close()
 
     flash(
-        f"Organizer '{username}' approved successfully! ✅",
+        f"Organizer '{username}' approved successfully! <i class='fa-solid fa-circle-check'></i>",
         "success"
     )
 
@@ -3045,7 +3046,7 @@ def reject_organizer(request_id):
     db.close()
 
     flash(
-        f"Organizer '{username}' rejected. ❌",
+        f"Organizer '{username}' rejected. <i class='fa-solid fa-circle-xmark'></i>",
         "success"
     )
 

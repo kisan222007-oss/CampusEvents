@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Admin Dashboard - CampusEvents</title>
+    <title>Admin Dashboard - RAIT Events</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -19,7 +20,7 @@
     <nav class="navbar">
 
         <div class="logo">
-            🎓 CampusEvents <span style="color: #666; font-size: 16px;">| Admin</span>
+            <i class="fa-solid fa-graduation-cap"></i> RAIT Events <span style="color: #666; font-size: 16px;">| Admin</span>
         </div>
 
         {% include "event_search_bar.html" %}
@@ -39,25 +40,25 @@
 
             <li>
                 <a href="/admin/registrations">
-                    👥 Registrations
+                    <i class="fa-solid fa-users"></i> Registrations
                 </a>
             </li>
 
             <li>
                 <a href="/search">
-                    🔎 Search Student
+                    <i class="fa-solid fa-magnifying-glass"></i> Search Student
                 </a>
             </li>
 
             <li>
                 <a href="/analysis">
-                    📊 Analysis
+                    <i class="fa-solid fa-chart-column"></i> Analysis
                 </a>
             </li>
 
             <li>
                 <a href="/profile">
-                    👤 Profile
+                    <i class="fa-solid fa-user"></i> Profile
                 </a>
             </li>
 
@@ -65,7 +66,7 @@
                 <a href="/logout"
                    class="btn btn-danger"
                    style="padding: 6px 14px; font-size: 14px;">
-                    🚪 Logout
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
                 </a>
             </li>
 
@@ -80,7 +81,7 @@
 
         <div class="page-title">
 
-            <h1>Admin Dashboard 📊</h1>
+            <h1>Admin Dashboard <i class="fa-solid fa-chart-column"></i></h1>
 
             <p>
                 Monitor college events and student registrations.
@@ -154,15 +155,15 @@
         <div class="admin-actions" style="margin-bottom: 40px;">
 
             <a href="/analysis" class="btn btn-primary">
-                📊 View Analysis
+                <i class="fa-solid fa-chart-column"></i> View Analysis
             </a>
 
             <a href="/search" class="btn btn-primary">
-                🔎 Search Student
+                <i class="fa-solid fa-magnifying-glass"></i> Search Student
             </a>
 
             <a href="/admin/registrations" class="btn btn-primary">
-                👥 Manage Registrations
+                <i class="fa-solid fa-users"></i> Manage Registrations
             </a>
 
             {% if session.get("admin_role") == "main_admin" %}
@@ -171,7 +172,7 @@
                 href="{{ url_for('manage_organizers') }}"
                 class="btn btn-primary"
             >
-                👥 Manage Organizers
+                <i class="fa-solid fa-users"></i> Manage Organizers
             </a>
 
             {% endif %}
@@ -183,7 +184,7 @@
             <div class="section-header">
 
                 <div>
-                    <h2>📅 Manage Events</h2>
+                    <h2><i class="fa-solid fa-calendar"></i> Manage Events</h2>
                     <p>View and manage all college events.</p>
                 </div>
 
@@ -201,15 +202,15 @@
                 <div class="event-card">
 
                     <h2>
-                        🎉 {{ event[1] }}
+                        <i class="fa-solid fa-calendar-check"></i> {{ event[1] }}
                     </h2>
 
                     <p>
-                        📅 {{ event[3] }}
+                        <i class="fa-solid fa-calendar"></i> {{ event[3] }}
                     </p>
 
                     <p>
-                        📍 {{ event[4] }}
+                        <i class="fa-solid fa-location-dot"></i> {{ event[4] }}
                     </p>
 
                     <p>
@@ -218,7 +219,7 @@
 
                     <div class="event-registration-count">
 
-                        👥
+                        <i class="fa-solid fa-users"></i>
                         <strong>{{ event[5] }}</strong>
 
                         {% if event[5] == 1 %}
@@ -234,7 +235,7 @@
                         <a
                             href="/admin/registrations?event={{ event[1] | urlencode }}"
                             class="btn btn-primary">
-                            👥 View Registrations
+                            <i class="fa-solid fa-users"></i> View Registrations
                         </a>
 
                         <a
@@ -286,7 +287,7 @@
     <footer class="footer">
 
         <p>
-            © 2026 CampusEvents
+            © 2026 RAIT Events | RAIT, DY Patil University Campus, Nerul, Navi Mumbai
         </p>
 
         <p>
@@ -315,7 +316,7 @@
             <div id="registrationWarning"
                  class="registration-warning">
 
-                ⚠️
+                <i class="fa-solid fa-triangle-exclamation"></i>
                 <strong id="registrationCount"></strong>
                 students are currently registered for this event.
 

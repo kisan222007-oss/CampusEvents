@@ -37,7 +37,7 @@ body {
 .logo {
     font-size: 24px;
     font-weight: bold;
-    color: #4f46e5;
+    color: #A6192E;
     white-space: nowrap;
     display: flex;
     align-items: center;
@@ -62,7 +62,7 @@ body {
 }
 
 .nav-links a:hover {
-    color: #4f46e5;
+    color: #A6192E;
 }
 
 
@@ -75,7 +75,7 @@ body {
     justify-content: center;
     text-align: center;
     padding: 60px 20px;
-    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    background: linear-gradient(135deg, #fff0f2, #f8fafc);
 }
 
 .hero-content {
@@ -110,12 +110,12 @@ body {
 }
 
 .btn-primary {
-    background: #4f46e5;
+    background: #A6192E;
     color: white;
 }
 
 .btn-primary:hover {
-    background: #3730a3;
+    background: #7c1322;
     transform: translateY(-2px);
 }
 
@@ -189,7 +189,7 @@ body {
 }
 
 .event-card h2 {
-    color: #4f46e5;
+    color: #A6192E;
     margin-bottom: 10px;
 }
 
@@ -246,7 +246,7 @@ body {
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    border-color: #4f46e5;
+    border-color: #A6192E;
 }
 
 
@@ -275,7 +275,7 @@ body {
 .stat-card .number {
     font-size: 35px;
     font-weight: bold;
-    color: #4f46e5;
+    color: #A6192E;
 }
 
 
@@ -1094,7 +1094,7 @@ tr:hover {
 
 .registration-controls input:focus,
 .registration-controls select:focus {
-    border-color: #667eea;
+    border-color: #A6192E;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
 }
 
@@ -1146,7 +1146,7 @@ tr:hover {
     display: inline-block;
     padding: 6px 11px;
     border-radius: 20px;
-    background: #eef2ff;
+    background: #fff0f2;
     font-size: 13px;
     font-weight: 600;
 }
@@ -1534,4 +1534,33 @@ tr:hover {
     .search-logo {
         text-align: center;
     }
+}
+
+/* =========================================
+   ENHANCED SCROLLING EXPERIENCE 
+   ========================================= */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Stylish Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f5f7fb; 
+    border-left: 1px solid #eaeaea;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #A6192E;
+    border-radius: 8px;
+    border: 2px solid #f5f7fb;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #7c1322;
 }
