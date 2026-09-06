@@ -195,6 +195,12 @@ def merge(left, right):
 # HOME
 # =========================
 
+
+@app.errorhandler(500)
+def internal_error(error):
+    import traceback
+    return f"<h1>Internal Server Error</h1><p><b>Error Details:</b> {str(error)}</p><pre>{traceback.format_exc()}</pre>", 500
+
 @app.route("/")
 def home():
 
