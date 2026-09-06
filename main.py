@@ -3120,5 +3120,40 @@ def event_search():
     )
 
 
+
+@app.route("/admin/students")
+def manage_students():
+    if "admin_logged_in" not in session:
+        return redirect(url_for("login"))
+    
+    db = get_db_connection()
+    cursor = db.cursor()
+    
+    cursor.execute("SELECT id, name, college_id, email, phone FROM students ORDER BY id DESC")
+    students = cursor.fetchall()
+    
+    cursor.close()
+    db.close()
+    
+    return render_template("admin_students.html", students=students)
+
+@app.route("/admin/students/delete/<int:student_id>", methods=["POST"])
+def delete_student(student_id):
+    if "admin_logged_in" not in session:
+        return redirect(url_for("login"))
+    
+    db = get_db_connection()
+    cursor = db.cursor()
+    
+    cursor.execute("DELETE FROM students WHERE id = %s", (student_id,))
+    db.commit()
+    
+    cursor.close()
+    db.close()
+    
+    flash("Student account permanently deleted.", "success")
+    return redirect(url_for("manage_students"))
+
+
 if __name__ == "__main__":
     app.run(debug=True)

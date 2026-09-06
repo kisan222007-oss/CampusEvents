@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students - RAIT Events</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    {% include 'toast.html' %}
+    
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-graduation-cap"></i> RAIT Events
+        </div>
+        <div class="mobile-menu-btn" onclick="this.nextElementSibling.classList.toggle('active')">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/admin">Dashboard</a></li>
+            <li><a href="/profile"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li>
+                <a href="/logout" class="btn btn-danger" style="padding: 6px 14px; font-size: 14px;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>Manage Students <i class="fa-solid fa-user-graduate"></i></h1>
+            <p>View all registered students and permanently delete inactive accounts.</p>
+        </div>
+
+        <div class="table-container" style="margin-top: 30px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>College ID</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student[0] }}</td>
+                        <td>{{ student[1] }}</td>
+                        <td>{{ student[2] }}</td>
+                        <td>{{ student[3] }}</td>
+                        <td>{{ student[4] }}</td>
+                        <td>
+                            <form action="/admin/students/delete/{{ student[0] }}" method="POST" onsubmit="return confirm('WARNING: Are you sure you want to permanently delete this student account? This action cannot be undone.');">
+                                <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 13px;">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 20px;">No students found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 RAIT Events | RAIT, DY Patil University Campus, Nerul, Navi Mumbai</p>
+    </footer>
+
+    <!-- Lenis Smooth Scrolling -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const lenis = new Lenis({
+                duration: 0.6,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                direction: 'vertical',
+                gestureDirection: 'vertical',
+                smooth: true,
+                smoothTouch: false,
+                touchMultiplier: 2
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+
+            requestAnimationFrame(raf);
+        });
+    </script>
+</body>
+</html>
