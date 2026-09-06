@@ -3,3 +3,4 @@ Flask-Mail==0.10.0
 gunicorn==26.2.0
 mysql-connector-python==26.7.0
 python-dotenv==1.2.3
+numpy==2.4.4
