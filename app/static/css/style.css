@@ -1591,3 +1591,33 @@ html {
 ::-webkit-scrollbar-thumb:hover {
     background: #7c1322;
 }
+
+/* Hero Logo */
+.hero-logo {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    max-width: 160px;
+    z-index: 5;
+}
+
+@media (max-width: 768px) {
+    .hero-logo {
+        position: static;
+        margin-bottom: 20px;
+        max-width: 120px;
+    }
+    
+    .hero {
+        flex-direction: column;
+        padding-top: 40px;
+    }
+    
+    .hero h1 {
+        font-size: 30px !important;
+    }
+    
+    .hero p {
+        font-size: 16px !important;
+    }
+}
