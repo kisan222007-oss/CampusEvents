@@ -3141,6 +3141,10 @@ def manage_students():
 def delete_student(student_id):
     if "admin_logged_in" not in session:
         return redirect(url_for("login"))
+        
+    if session.get("admin_role") != "main_admin":
+        flash("Unauthorized. Only Main Admins can delete student accounts.", "error")
+        return redirect(url_for("manage_students"))
     
     db = get_db_connection()
     cursor = db.cursor()

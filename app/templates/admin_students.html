@@ -56,11 +56,17 @@
                         <td>{{ student[3] }}</td>
                         <td>{{ student[4] }}</td>
                         <td>
-                            <form action="/admin/students/delete/{{ student[0] }}" method="POST" onsubmit="event.preventDefault(); showDeleteModal(this);">
-                                <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 13px;">
+                            {% if session.get('admin_role') == 'main_admin' %}
+                                <form action="/admin/students/delete/{{ student[0] }}" method="POST" onsubmit="event.preventDefault(); showDeleteModal(this);">
+                                    <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 13px;">
+                                        Delete
+                                    </button>
+                                </form>
+                            {% else %}
+                                <button type="button" class="btn btn-danger" style="padding: 6px 12px; font-size: 13px; opacity: 0.5; cursor: not-allowed;" title="Only Main Admin can delete students">
                                     Delete
                                 </button>
-                            </form>
+                            {% endif %}
                         </td>
                     </tr>
                     {% else %}
