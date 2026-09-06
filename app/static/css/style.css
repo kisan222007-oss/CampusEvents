@@ -414,14 +414,23 @@ tr:hover {
 @media (max-width: 768px) {
 
     .navbar {
-        flex-direction: column;
-        gap: 15px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0;
     }
 
     .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
         gap: 12px;
-        flex-wrap: wrap;
-        justify-content: center;
+        padding-top: 15px;
+        text-align: center;
+    }
+    
+    .nav-links.active {
+        display: flex;
     }
 
     .hero h1 {
@@ -1619,5 +1628,18 @@ html {
     
     .hero p {
         font-size: 16px !important;
+    }
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+    display: none;
+    font-size: 26px;
+    color: #A6192E;
+    cursor: pointer;
+}
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: block;
     }
 }
