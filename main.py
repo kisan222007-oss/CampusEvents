@@ -27,6 +27,9 @@ app = Flask(
     static_folder="app/static"
 )
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app.secret_key = os.environ.get(
     "FLASK_SECRET_KEY",
@@ -129,10 +132,12 @@ def student_required(f):
 
 def get_db_connection():
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="college_management"
+        host=os.environ.get("DB_HOST", "localhost"),
+        port=int(os.environ.get("DB_PORT", "3306")),
+        user=os.environ.get("DB_USER", "root"),
+        password=os.environ.get("DB_PASSWORD", ""),
+        database=os.environ.get("DB_NAME", "college_management"),
+        ssl_disabled=False
     )
 
 
