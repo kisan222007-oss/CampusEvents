@@ -96,8 +96,11 @@
                 </li>
 
                 <li>
-                    <a href="/login"><i class="fa-solid fa-lock"></i> Admin Login</a>
-                </li>
+                <a href="/login?role=organizer"><i class="fa-solid fa-user-tie"></i> Organizer Login</a>
+            </li>
+            <li>
+                <a href="/login?role=admin"><i class="fa-solid fa-lock"></i> Admin Login</a>
+            </li>
 
             {% endif %}
 
@@ -111,7 +114,7 @@
     <section class="hero">
         <img src="/static/images/logo_transparent.png" alt="DY Patil University Logo" class="floating-logo">
         <div class="hero-content" style="max-width: 800px; margin: 0 auto;">
-            <p class="hero-eyebrow" style="font-weight: 700; letter-spacing: 2px; color: var(--primary-color); margin-bottom: 15px; font-size: 14px; text-transform: uppercase;">RAIT • COLLEGE EVENTS</p>
+            <p class="hero-eyebrow" style="font-weight: 700; letter-spacing: 2px; color: var(--primary-color); margin-bottom: 15px; font-size: 14px; text-transform: uppercase;">RAMRAO ADIK INSTITUTE OF TECHNOLOGY • COLLEGE EVENTS</p>
             <h1 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px;">
                 Discover. Register. Participate.
             </h1>
@@ -193,7 +196,7 @@
 
             <div class="dashboard-card" style="text-align: center;">
 
-                <h2>👨💼 Admin Logged In</h2>
+                <h2>👨💼 Dashboard Portal</h2>
 
                 <p style="font-size: 18px; margin-top: 10px;">
                     Manage events, registrations and analytics.
@@ -207,30 +210,24 @@
 
         {% else %}
 
-            <div class="login-options dashboard-grid">
+            <div class="login-options dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
 
-                <a href="/student-login" class="dashboard-card">
-
+                <a href="/student-login" class="dashboard-card" style="text-decoration: none;">
                     <h2><i class="fa-solid fa-graduation-cap"></i></h2>
-
                     <h3>Student Login</h3>
-
-                    <p>
-                        Login to register and manage your events.
-                    </p>
-
+                    <p>Login to register and manage your events.</p>
                 </a>
 
-                <a href="/login" class="dashboard-card">
-
+                <a href="/login?role=organizer" class="dashboard-card" style="text-decoration: none;">
+                    <h2><i class="fa-solid fa-user-tie"></i></h2>
+                    <h3>Organizer Login</h3>
+                    <p>Host events, manage capacities and track attendance.</p>
+                </a>
+                
+                <a href="/login?role=admin" class="dashboard-card" style="text-decoration: none;">
                     <h2><i class="fa-solid fa-lock"></i></h2>
-
                     <h3>Admin Login</h3>
-
-                    <p>
-                        Manage events, registrations and analytics.
-                    </p>
-
+                    <p>Platform moderation and global analytics.</p>
                 </a>
 
             </div>

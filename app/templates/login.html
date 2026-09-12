@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Admin Login - RAIT Events</title>
+    <title>{{ request.args.get('role', 'Admin').title() }} Login</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
@@ -17,119 +17,70 @@
 </head>
 
 <body>
+
     {% include 'toast.html' %}
 
-    <nav class="navbar">
-        <div class="logo">
-            <i class="fa-solid fa-graduation-cap"></i> RAIT Events <span style="color: #666; font-size: 16px;">| Admin</span>
-        </div>
-        
-        {% include "event_search_bar.html" %}
-        
-                <div class="mobile-menu-btn" onclick="this.nextElementSibling.classList.toggle('active')">
-            <i class="fa-solid fa-bars"></i>
-        </div>
-        <ul class="nav-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/events"><i class="fa-solid fa-calendar-check"></i> Events</a></li>
-        </ul>
-    </nav>
 
     <div class="login-container">
 
         <div class="login-card">
 
-            <div class="login-icon">
-                <i class="fa-solid fa-lock"></i>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <i class="fa-solid fa-user-tie" style="font-size: 40px; color: #A6192E;"></i>
             </div>
 
-            <h1>Admin Login</h1>
+            <h2>{{ request.args.get('role', 'Admin').title() }} Login</h2>
 
-            <p>
-                Login to manage college events
+            <p style="text-align: center; margin-bottom: 30px; color: #666;">
+                Login to the {{ request.args.get('role', 'admin') }} dashboard.
             </p>
 
-
-            <form method="POST"
-                  action="/login">
+            <form method="POST" action="/login">
 
                 <div class="form-group">
 
-                    <label>
-                        Username
-                    </label>
+                    <label>Username</label>
 
-                    <input
-                        type="text"
-                        name="username"
-                        placeholder="Enter username"
-                        required>
+                    <div class="input-icon">
+                        <i class="fa-solid fa-user"></i>
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="Enter username"
+                            required>
+                    </div>
 
                 </div>
 
-
                 <div class="form-group">
 
-                    <label>
-                        Password
-                    </label>
+                    <label>Password</label>
 
-                    <div class="password-wrapper">
-
+                    <div class="input-icon">
+                        <i class="fa-solid fa-lock"></i>
                         <input
                             type="password"
                             name="password"
-                            id="adminPassword"
-                            placeholder="Enter your password"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            onclick="toggleAdminPassword()"
-                        >
-                            👁️
-                        </button>
-
+                            placeholder="Enter password"
+                            required>
                     </div>
 
-                    <script>
-                    function toggleAdminPassword() {
-
-                        const password = document.getElementById("adminPassword");
-                        const button = document.querySelector(".password-toggle");
-
-                        if (password.type === "password") {
-                            password.type = "text";
-                            button.textContent = "🙈";
-                        } else {
-                            password.type = "password";
-                            button.textContent = "👁️";
-                        }
-                    }
-                    </script>
-
                 </div>
 
-                <div style="text-align: right; margin-top: 8px;">
-                    <a href="{{ url_for('admin_forgot_password') }}">
+                <div style="text-align: right; margin-bottom: 20px;">
+                    <a
+                        href="/admin-forgot-password"
+                        style="color: #666; font-size: 14px; text-decoration: none;">
+
                         Forgot Password?
+
                     </a>
                 </div>
-
-                <div style="text-align: center; margin-top: 15px;">
-
-                    <a href="{{ url_for('organizer_register') }}">
-                        <i class="fa-solid fa-user"></i> Register as Organizer
-                    </a>
-
-                </div>
-
 
                 <button
                     type="submit"
-                    class="btn btn-primary login-btn">
+                    class="btn btn-primary"
+                    style="width: 100%;">
 
                     Login
 
@@ -137,38 +88,27 @@
 
             </form>
 
+            <div style="margin-top: 25px; text-align: center;">
 
-            <a href="/">
-                ← Back to Home
-            </a>
+                <a href="/"
+                   class="btn"
+                   style="font-size: 14px;">
+                    ← Back to Home
+                </a>
+
+            </div>
+            
+            {% if request.args.get('role') == 'organizer' %}
+            <div style="margin-top: 15px; text-align: center; font-size: 14px;">
+                Want to host an event? 
+                <a href="/organizer-register" style="color: var(--primary-color); font-weight: 600;">Register here</a>
+            </div>
+            {% endif %}
 
         </div>
 
     </div>
 
-
-    <!-- Lenis Smooth Scrolling -->
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const lenis = new Lenis({
-                duration: 0.6,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                direction: 'vertical',
-                gestureDirection: 'vertical',
-                smooth: true,
-                smoothTouch: false,
-                touchMultiplier: 2
-            });
-
-            function raf(time) {
-                lenis.raf(time);
-                requestAnimationFrame(raf);
-            }
-
-            requestAnimationFrame(raf);
-        });
-    </script>
 </body>
 
 </html>

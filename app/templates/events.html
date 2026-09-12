@@ -107,22 +107,38 @@
                 <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
                     <span style="background: #eee; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; color: var(--primary-color);">{{ event[6] }}</span>
                     {% set seats_left = event[7] - event[9] %}
+                    {% set percent_full = (event[9] / event[7] * 100) if event[7] > 0 else 0 %}
                     {% if seats_left <= 0 %}
-                        <span style="background: #ffebee; color: #d32f2f; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Closed (Full)</span>
+                        <span style="background: #ffebee; color: #d32f2f; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;"><i class="fa-solid fa-lock"></i> Full</span>
                     {% elif seats_left <= 10 %}
-                        <span style="background: #fff3e0; color: #e65100; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Filling Fast ({{ seats_left }} left)</span>
+                        <span style="background: #fff3e0; color: #e65100; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;"><i class="fa-solid fa-fire"></i> Filling Fast!</span>
                     {% else %}
-                        <span style="background: #e8f5e9; color: #2e7d32; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Open ({{ seats_left }} seats)</span>
+                        <span style="background: #e8f5e9; color: #2e7d32; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Open</span>
                     {% endif %}
                 </div>
 
-                <h2 style="margin-top: 0;">{{ event[1] }}</h2>
+                <h2 style="margin-top: 0; font-size: 22px;">{{ event[1] }}</h2>
                 <p><i class="fa-solid fa-calendar"></i> {{ event[3] }}</p>
                 <p><i class="fa-solid fa-location-dot"></i> {{ event[4] }}</p>
                 <p style="color: #666; font-size: 14px; margin-top: 5px; margin-bottom: 12px;">
                     <i class="fa-solid fa-user-tie"></i> Organised by: <strong>{{ event[5] or 'University Admin' }}</strong>
                 </p>
                 <p style="margin-bottom: 20px;">{{ event[2] }}</p>
+                
+                <!-- 10/10 Ultra Professional Progress Bar -->
+                <div style="margin-bottom: 20px; background: #f9f9f9; padding: 12px; border-radius: 8px; border: 1px solid #eee;">
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px;">
+                        <span style="color: #555;"><i class="fa-solid fa-users"></i> {{ event[9] }} Registered</span>
+                        {% if seats_left <= 0 %}
+                            <span style="color: #d32f2f;">0 Seats Left</span>
+                        {% else %}
+                            <span style="color: var(--primary-color);">{{ seats_left }} Seats Left</span>
+                        {% endif %}
+                    </div>
+                    <div style="height: 8px; width: 100%; background: #e0e0e0; border-radius: 4px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);">
+                        <div style="height: 100%; width: {{ percent_full }}%; background: {% if percent_full >= 100 %}#d32f2f{% elif percent_full >= 80 %}#f57c00{% else %}#43a047{% endif %}; border-radius: 4px; transition: width 1s ease-in-out;"></div>
+                    </div>
+                </div>
                 
                 {% if seats_left > 0 %}
                 <a href="/register/{{ event[0] }}" class="btn btn-primary" style="width: 100%; text-align: center;">Register Now</a>
