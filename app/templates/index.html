@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body>
+<body class="home-page">
     {% include 'toast.html' %}
 
     <!-- ================= NAVBAR ================= -->
@@ -92,7 +92,7 @@
             {% else %}
 
                 <li>
-                    <a href="/student-login"><i class="fa-solid fa-graduation-cap"></i> Student Login</a>
+                    <a href="/student-login" class="nav-pill-btn">Student Login</a>
                 </li>
 
                 <li>
@@ -125,9 +125,15 @@
                 <a href="/events" class="btn btn-primary" style="padding: 12px 28px; font-size: 16px;">
                     Explore Events
                 </a>
+                {% if session.get("admin_logged_in") %}
+                <a href="/admin" class="btn" style="padding: 12px 28px; font-size: 16px; background: white; color: #333; border: 1px solid #ddd;">
+                    View My Events
+                </a>
+                {% else %}
                 <a href="/my-events" class="btn" style="padding: 12px 28px; font-size: 16px; background: white; color: #333; border: 1px solid #ddd;">
                     View My Registrations
                 </a>
+                {% endif %}
             </div>
         </div>
     </section>
@@ -288,14 +294,23 @@
                     <i class="fa-solid fa-chart-column"></i> Track Events
                 </h2>
 
+                {% if session.get("admin_logged_in") %}
+                <p>
+                    Manage the events you have created
+                    and track registrations.
+                </p>
+                <a href="/admin" class="btn btn-primary">
+                    My Created Events
+                </a>
+                {% else %}
                 <p>
                     Keep track of all the events
                     you have registered for.
                 </p>
-
                 <a href="/my-events" class="btn btn-primary">
-                    My Events
+                    My Registrations
                 </a>
+                {% endif %}
 
             </div>
 

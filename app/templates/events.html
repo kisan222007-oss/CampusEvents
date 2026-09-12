@@ -65,7 +65,7 @@
             {% else %}
 
             <li>
-                <a href="/student-login"><i class="fa-solid fa-lock"></i> Student Login</a>
+                <a href="/student-login" class="nav-pill-btn">Student Login</a>
             </li>
 
             {% endif %}
@@ -100,6 +100,11 @@
             {% for event in events %}
 
             <div class="event-card" data-category="{{ event[6] }}">
+                {% if event[8] %}
+                <div style="height: 150px; width: 100%; border-radius: 8px; margin-bottom: 15px; overflow: hidden; background: #eee;">
+                    <img src="{{ event[8] }}" style="width: 100%; height: 100%; object-fit: cover;" alt="Event Banner">
+                </div>
+                {% endif %}
                 {% if event[8] %}
                 <div style="height: 140px; background-image: url('{{ event[8] }}'); background-size: cover; background-position: center; border-radius: 8px 8px 0 0; margin: -20px -20px 15px -20px;"></div>
                 {% endif %}
@@ -140,10 +145,18 @@
                     </div>
                 </div>
                 
-                {% if seats_left > 0 %}
-                <a href="/register/{{ event[0] }}" class="btn btn-primary" style="width: 100%; text-align: center;">Register Now</a>
+                {% if session.get("admin_logged_in") %}
+                    {% if seats_left > 0 %}
+                    <button onclick="alert('Organizers and Admins cannot register for events. Please use the Organizer Dashboard to manage events.');" class="btn btn-primary" style="width: 100%; text-align: center;">Register Now</button>
+                    {% else %}
+                    <button class="btn" style="width: 100%; cursor: not-allowed; opacity: 0.6;" disabled>Registration Closed</button>
+                    {% endif %}
                 {% else %}
-                <button class="btn" style="width: 100%; cursor: not-allowed; opacity: 0.6;" disabled>Registration Closed</button>
+                    {% if seats_left > 0 %}
+                    <a href="/register/{{ event[0] }}" class="btn btn-primary" style="width: 100%; text-align: center;">Register Now</a>
+                    {% else %}
+                    <button class="btn" style="width: 100%; cursor: not-allowed; opacity: 0.6;" disabled>Registration Closed</button>
+                    {% endif %}
                 {% endif %}
             </div>
 

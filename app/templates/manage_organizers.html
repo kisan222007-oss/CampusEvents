@@ -23,7 +23,7 @@
 <body>
     <nav class="navbar">
         <div class="logo">
-            <i class="fa-solid fa-graduation-cap"></i> RAIT Events <span style="color: #666; font-size: 16px;">| Admin</span>
+            <i class="fa-solid fa-graduation-cap"></i> RAIT Events <span style="color: #666; font-size: 16px;">| {% if session.admin_role == "organizer" %}Organizer{% else %}Admin{% endif %}</span>
         </div>
         
         {% include "event_search_bar.html" %}
@@ -34,11 +34,7 @@
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
             <li><a href="/events"><i class="fa-solid fa-calendar-check"></i> Events</a></li>
-            <li>
-                <a href="/profile">
-                    <i class="fa-solid fa-user"></i> Profile
-                </a>
-            </li>
+            
             <li>
                 <a href="/logout" class="btn btn-danger" style="padding: 6px 14px; font-size: 14px;">
                     <i class="fa-solid fa-right-from-bracket"></i> Logout

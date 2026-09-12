@@ -23,30 +23,39 @@ body {
 /* ---------- NAVBAR ---------- */
 
 .navbar {
-    padding: 15px 5%;
+    padding: 10px 10px 10px 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(255, 255, 255, 0.9) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 0;
+    gap: 40px;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 95%;
+    border-radius: 100px;
     z-index: 1000;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    gap: 20px;
+}
+body {
+    padding-top: 100px;
+}
+body.home-page {
+    padding-top: 0;
 }
 
 .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #A6192E;
-    white-space: nowrap;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
     display: flex;
     align-items: center;
     gap: 8px;
-    flex-shrink: 0;
+    letter-spacing: -0.01em;
 }
 
 .nav-links {
@@ -416,12 +425,16 @@ tr:hover {
 /* ---------- RESPONSIVE ---------- */
 
 @media (max-width: 768px) {
-
     .navbar {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-between;
         gap: 0;
+        width: 100%;
+        max-width: 100%;
+        top: 0;
+        border-radius: 0;
+        padding: 15px 5%;
     }
 
     .nav-links {
@@ -1693,4 +1706,26 @@ html {
     .mobile-menu-btn {
         display: block;
     }
+}
+
+.nav-pill-btn {
+    background: #0f172a;
+    color: white !important;
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.nav-pill-btn:hover {
+    background: #000;
+    transform: scale(1.02);
+}
+
+.logo i {
+    color: #f97316;
+    font-size: 18px;
 }

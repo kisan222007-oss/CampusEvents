@@ -34,7 +34,20 @@
     </nav>
 
 
-    <div class="container">
+    {% if empty %}
+    <div class="container" style="text-align: center; margin-top: 50px;">
+        <i class="fa-solid fa-chart-column" style="font-size: 64px; color: #ccc; margin-bottom: 20px;"></i>
+        <h2>No Registration Data Yet</h2>
+        <p style="color: #666; margin-top: 10px; margin-bottom: 30px;">Once students start registering for your events, analytics and charts will appear here.</p>
+        <a href="/admin" class="btn btn-primary">← Back to Dashboard</a>
+    </div>
+    
+    <footer class="footer" style="position: fixed; bottom: 0; width: 100%;">
+        <p>© 2026 RAIT Events | RAIT, DY Patil University Campus, Nerul, Navi Mumbai</p>
+        <p>College Event Management System</p>
+    </footer>
+{% else %}
+<div class="container">
 
         <div class="page-title">
 
@@ -166,6 +179,7 @@
         <p>College Event Management System</p>
 
     </footer>
+{% endif %}
 
     <script>
 

@@ -57,9 +57,15 @@
             </li>
 
             {% else %}
-
+            
             <li>
-                <a href="/student-login"><i class="fa-solid fa-lock"></i> Student Login</a>
+                <a href="/student-login" class="nav-pill-btn">Student Login</a>
+            </li>
+            <li>
+                <a href="/login?role=organizer"><i class="fa-solid fa-user-tie"></i> Organizer Login</a>
+            </li>
+            <li>
+                <a href="/login?role=admin"><i class="fa-solid fa-lock"></i> Admin Login</a>
             </li>
 
             {% endif %}
@@ -70,16 +76,16 @@
 
     <div class="login-container">
 
-        <div class="login-card">
+        <div class="login-card" style="box-shadow: 0 10px 40px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; border-radius: 16px; padding: 40px;">
 
-            <div class="login-icon">
+            <div class="login-icon" style="background: var(--primary-color); color: white; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin: 0 auto 20px auto; font-size: 24px; box-shadow: 0 4px 15px rgba(166, 25, 46, 0.3);">
                 <i class="fa-solid fa-graduation-cap"></i>
             </div>
 
-            <h1>Student Login</h1>
+            <h1 style="text-align: center; margin-bottom: 10px; font-size: 28px;">Welcome Back!</h1>
 
-            <p>
-                Enter your College ID to continue
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Enter your College ID and password to access your dashboard.
             </p>
 
             <form method="POST">
@@ -132,30 +138,34 @@
                     name="next"
                     value="{{ next_page or '' }}">
 
-                <button type="submit" class="btn btn-primary login-btn">
-                    <i class="fa-solid fa-lock"></i> Login
+                <button type="submit" class="btn btn-primary login-btn" style="width: 100%; padding: 14px; font-size: 16px; margin-top: 10px; border-radius: 8px;">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Login to Dashboard
                 </button>
-
-                <p style="text-align: center; margin-top: 15px;">
-                    <a href="{{ url_for('forgot_password') }}">
-                        🔑 Forgot Password?
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="{{ url_for('forgot_password') }}" style="color: #666; text-decoration: none; font-size: 14px;">
+                        <i class="fa-solid fa-key"></i> Forgot Password?
                     </a>
-                </p>
+                </div>
 
             </form>
 
-            <div class="register-link">
-                <p>New Student?</p>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+
+            <div class="register-link" style="text-align: center; display: flex; flex-direction: column; gap: 10px;">
+                <span style="color: #666; font-size: 14px;">Don't have an account?</span>
                 <a
                     href="{{ url_for('student_register', next=request.args.get('next')) }}"
-                    class="btn btn-secondary">
-                    <i class="fa-solid fa-pen-to-square"></i> Create Account
+                    class="btn" style="background: white; color: var(--primary-color); border: 2px solid var(--primary-color); width: 100%; border-radius: 8px; padding: 12px;">
+                    <i class="fa-solid fa-user-plus"></i> Create Student Account
                 </a>
             </div>
 
-            <a href="/">
-                ← Back to Home
-            </a>
+            <div style="text-align: center; margin-top: 25px;">
+                <a href="/" style="color: #888; text-decoration: none; font-size: 14px;">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
 
         </div>
 

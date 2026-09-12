@@ -1968,7 +1968,11 @@ def analysis():
     db.close()
 
     if not data:
-        return "No registration data available."
+        # Instead of returning raw string, render a beautiful empty state
+        return render_template(
+            "analysis.html",
+            empty=True
+        )
 
     event_names = [row[0] for row in data]
 
@@ -2639,24 +2643,38 @@ def student_register():
         password_hash = generate_password_hash(password)
 
         # Create student account
-        cursor.execute(
-            """
-            INSERT INTO students
-            (name, college_id, email, phone, password_hash)
-            VALUES (%s, %s, %s, %s, %s)
-            """,
-            (
-                name,
-                college_id,
-                email,
-                phone,
-                password_hash
+        # Find the first missing ID (gap) to reuse deleted IDs
+        cursor.execute("""
+            SELECT MIN(t1.id + 1) AS next_id 
+            FROM (SELECT 0 AS id UNION ALL SELECT id FROM students) t1 
+            LEFT JOIN students t2 ON t1.id + 1 = t2.id 
+            WHERE t2.id IS NULL
+        """)
+        next_id_row = cursor.fetchone()
+        next_id = next_id_row[0] if next_id_row and next_id_row[0] else None
+
+        if next_id:
+            cursor.execute(
+                """
+                INSERT INTO students
+                (id, name, college_id, email, phone, password_hash)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                """,
+                (next_id, name, college_id, email, phone, password_hash)
             )
-        )
+            student_id = next_id
+        else:
+            cursor.execute(
+                """
+                INSERT INTO students
+                (name, college_id, email, phone, password_hash)
+                VALUES (%s, %s, %s, %s, %s)
+                """,
+                (name, college_id, email, phone, password_hash)
+            )
+            student_id = cursor.lastrowid
 
         db.commit()
-
-        student_id = cursor.lastrowid
 
         # Login newly created student
         session["student_logged_in"] = True
@@ -3170,7 +3188,7 @@ def manage_students():
     db = get_db_connection()
     cursor = db.cursor()
     
-    cursor.execute("SELECT id, name, college_id, email, phone FROM students ORDER BY id DESC")
+    cursor.execute("SELECT id, name, college_id, email, phone FROM students ORDER BY id ASC")
     students = cursor.fetchall()
     
     cursor.close()

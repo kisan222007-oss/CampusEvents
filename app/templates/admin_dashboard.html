@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Organizer Dashboard - RAIT Events</title>
+    <title>{% if session.admin_role == "organizer" %}Organizer{% else %}Admin{% endif %} Dashboard - RAIT Events</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
@@ -20,7 +20,7 @@
     <nav class="navbar">
 
         <div class="logo">
-            <i class="fa-solid fa-graduation-cap"></i> RAIT Events <span style="color: #666; font-size: 16px;">| Admin</span>
+            <i class="fa-solid fa-graduation-cap"></i> RAIT Events <span style="color: #666; font-size: 16px;">| {% if session.admin_role == "organizer" %}Organizer{% else %}Admin{% endif %}</span>
         </div>
 
         {% include "event_search_bar.html" %}
@@ -41,29 +41,13 @@
                 <a href="/admin">Dashboard</a>
             </li>
 
-            <li>
-                <a href="/admin/registrations">
-                    <i class="fa-solid fa-users"></i> Registrations
-                </a>
-            </li>
+            
 
-            <li>
-                <a href="/search">
-                    <i class="fa-solid fa-magnifying-glass"></i> Search Student
-                </a>
-            </li>
+            
 
-            <li>
-                <a href="/analysis">
-                    <i class="fa-solid fa-chart-column"></i> Analysis
-                </a>
-            </li>
+            
 
-            <li>
-                <a href="/profile">
-                    <i class="fa-solid fa-user"></i> Profile
-                </a>
-            </li>
+            
 
             <li>
                 <a href="/logout"
@@ -84,7 +68,7 @@
 
         <div class="page-title">
 
-            <h1>Organizer Dashboard <i class="fa-solid fa-chart-column"></i></h1>
+            <h1>{% if session.admin_role == "organizer" %}Organizer{% else %}Admin{% endif %} Dashboard <i class="fa-solid fa-chart-column"></i></h1>
 
             <p>
                 Monitor college events and student registrations.
@@ -155,7 +139,7 @@
 
         <!-- EVENT STATISTICS -->
 
-        <div class="admin-actions" style="margin-bottom: 40px;">
+        <div class="admin-actions" style="margin-bottom: 40px; display: flex; flex-wrap: wrap; gap: 10px;">
 
             <a href="/analysis" class="btn btn-primary">
                 <i class="fa-solid fa-chart-column"></i> View Analysis
@@ -207,6 +191,11 @@
                 {% for event in events %}
 
                 <div class="event-card" style="display: flex; flex-direction: column;">
+                    {% if event[8] %}
+                    <div style="height: 120px; width: 100%; border-radius: 8px; margin-bottom: 15px; overflow: hidden; background: #eee;">
+                        <img src="{{ event[8] }}" style="width: 100%; height: 100%; object-fit: cover;" alt="Event Banner">
+                    </div>
+                    {% endif %}
                     
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
                         <span style="background: #eee; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; color: var(--primary-color);">{{ event[6] }}</span>
@@ -234,15 +223,13 @@
                         {{ event[2] }}
                     </p>
 
-                    <div class="event-registration-count" style="margin-top: 15px;">
-                        <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
-                            <div>
-                                <i class="fa-solid fa-users"></i>
-                                <strong>{{ event[5] }}</strong> / {{ event[7] }} registered
-                            </div>
-                            <div style="height: 6px; width: 40%; background: #eee; border-radius: 3px; overflow: hidden;">
-                                <div style="height: 100%; width: {{ (event[5] / event[7] * 100) if event[7] > 0 else 0 }}%; background: var(--primary-color);"></div>
-                            </div>
+                    <div class="event-registration-count" style="margin-top: 20px; background: #f9f9f9; padding: 12px; border-radius: 8px; border: 1px solid #eee;">
+                        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 8px;">
+                            <span style="color: #555;"><i class="fa-solid fa-users"></i> {{ event[5] }} Registered</span>
+                            <span style="color: var(--primary-color);">{{ event[7] }} Total Seats</span>
+                        </div>
+                        <div style="height: 8px; width: 100%; background: #e0e0e0; border-radius: 4px; overflow: hidden;">
+                            <div style="height: 100%; width: {{ (event[5] / event[7] * 100) if event[7] > 0 else 0 }}%; background: var(--primary-color); border-radius: 4px;"></div>
                         </div>
                     </div>
 
