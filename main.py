@@ -196,10 +196,16 @@ def merge(left, right):
 # =========================
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
 @app.errorhandler(500)
 def internal_error(error):
-    import traceback
-    return f"<h1>Internal Server Error</h1><p><b>Error Details:</b> {str(error)}</p><pre>{traceback.format_exc()}</pre>", 500
+    # Log the error trace (optional)
+    # import traceback
+    # print(traceback.format_exc())
+    return render_template('500.html'), 500
 
 @app.route("/")
 def home():
@@ -214,17 +220,16 @@ def home():
             e.description,
             e.event_date,
             e.location,
-            COUNT(r.id) AS registration_count
+            COUNT(r.id) AS registration_count,
+            e.category,
+            e.capacity,
+            e.banner_url
         FROM events e
         LEFT JOIN registrations r
             ON e.name = r.event
+        WHERE e.event_date >= CURDATE()
         GROUP BY
-            e.id,
-            e.name,
-            e.description,
-            e.event_date,
-            e.location
-        HAVING COUNT(r.id) > 0
+            e.id, e.name, e.description, e.event_date, e.location, e.category, e.capacity, e.banner_url
         ORDER BY registration_count DESC, e.event_date ASC
         LIMIT 1
     """)
@@ -251,9 +256,12 @@ def events():
     cursor = db.cursor()
 
     cursor.execute("""
-        SELECT e.id, e.name, e.description, e.event_date, e.location, a.username
+        SELECT e.id, e.name, e.description, e.event_date, e.location, a.username,
+               e.category, e.capacity, e.banner_url,
+               (SELECT COUNT(*) FROM registrations r WHERE r.event = e.name) as registration_count
         FROM events e
         LEFT JOIN admins a ON e.created_by = a.id
+        WHERE e.event_date >= CURDATE()
         ORDER BY e.event_date ASC
     """)
 
@@ -1086,16 +1094,14 @@ def admin():
                 e.description,
                 e.event_date,
                 e.location,
-                COUNT(r.id) AS registration_count
+                COUNT(r.id) AS registration_count,
+                e.category,
+                e.capacity
             FROM events e
             LEFT JOIN registrations r
                 ON e.name = r.event
             GROUP BY
-                e.id,
-                e.name,
-                e.description,
-                e.event_date,
-                e.location
+                e.id, e.name, e.description, e.event_date, e.location, e.category, e.capacity
             ORDER BY e.event_date ASC
         """)
 
@@ -1146,17 +1152,15 @@ def admin():
                 e.description,
                 e.event_date,
                 e.location,
-                COUNT(r.id) AS registration_count
+                COUNT(r.id) AS registration_count,
+                e.category,
+                e.capacity
             FROM events e
             LEFT JOIN registrations r
                 ON e.name = r.event
             WHERE e.created_by = %s
             GROUP BY
-                e.id,
-                e.name,
-                e.description,
-                e.event_date,
-                e.location
+                e.id, e.name, e.description, e.event_date, e.location, e.category, e.capacity
             ORDER BY e.event_date ASC
         """, (admin_id,))
 
@@ -2741,21 +2745,37 @@ def student_register():
 @app.route("/student-dashboard")
 @student_required
 def student_dashboard():
-
     if not session.get("student_logged_in"):
-
-        flash(
-            "Please login first.",
-            "error"
-        )
-
+        flash("Please login first.", "error")
         return redirect(url_for("student_login"))
 
     college_id = session.get("student_college_id")
+    db = get_db_connection()
+    cursor = db.cursor()
+
+    # Total registrations
+    cursor.execute("SELECT COUNT(*) FROM registrations WHERE college_id = %s", (college_id,))
+    total_reg = cursor.fetchone()[0]
+
+    # Upcoming registrations
+    cursor.execute("""
+        SELECT e.name, e.event_date 
+        FROM registrations r
+        JOIN events e ON r.event = e.name
+        WHERE r.college_id = %s AND e.event_date >= CURDATE()
+        ORDER BY e.event_date ASC
+        LIMIT 3
+    """, (college_id,))
+    upcoming_events = cursor.fetchall()
+    
+    cursor.close()
+    db.close()
 
     return render_template(
         "student_dashboard.html",
-        college_id=college_id
+        college_id=college_id,
+        total_reg=total_reg,
+        upcoming_events=upcoming_events
     )
 
 
@@ -2806,11 +2826,12 @@ def register_event(event_id):
 
     student = cursor.fetchone()
 
-    # Get event details
+    # Get event details and capacity
     cursor.execute("""
-        SELECT id, name
-        FROM events
-        WHERE id = %s
+        SELECT e.id, e.name, e.event_date, e.capacity,
+               (SELECT COUNT(*) FROM registrations r WHERE r.event = e.name) as current_regs
+        FROM events e
+        WHERE e.id = %s
     """, (event_id,))
 
     event = cursor.fetchone()
@@ -2818,18 +2839,32 @@ def register_event(event_id):
     if not student:
         cursor.close()
         db.close()
-
         flash("Student not found.", "error")
         return redirect(url_for("student_login"))
 
     if not event:
         cursor.close()
         db.close()
-
         flash("Event not found.", "error")
         return redirect(url_for("events"))
 
     event_name = event[1]
+    event_date = event[2]
+    capacity = event[3]
+    current_regs = event[4]
+
+    from datetime import date
+    if event_date < date.today():
+        cursor.close()
+        db.close()
+        flash("Registration is closed. This event has already passed.", "error")
+        return redirect(url_for("events"))
+        
+    if current_regs >= capacity and capacity > 0:
+        cursor.close()
+        db.close()
+        flash(f"Registration for {event_name} is full (capacity: {capacity}).", "error")
+        return redirect(url_for("events"))
 
     # Check duplicate registration
     cursor.execute("""

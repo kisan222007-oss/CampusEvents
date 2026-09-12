@@ -76,62 +76,59 @@
 
     <div class="container">
 
+
         <div class="dashboard-header">
-
             <div>
-
                 <h1><i class="fa-solid fa-calendar-check"></i> College Events</h1>
-
-                <p>
-                    Discover upcoming events and register.
-                </p>
-
+                <p>Discover upcoming events and register.</p>
             </div>
-
-            <a href="/student-dashboard"
-               class="btn">
-
-                ← Dashboard
-
-            </a>
-
+            <a href="/student-dashboard" class="btn">← Dashboard</a>
         </div>
+
+        <div class="event-filters" style="margin-bottom: 24px; display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+            <button class="btn btn-primary" onclick="filterEvents('All')">All</button>
+            <button class="btn" onclick="filterEvents('General')">General</button>
+            <button class="btn" onclick="filterEvents('Technical')">Technical</button>
+            <button class="btn" onclick="filterEvents('Cultural')">Cultural</button>
+            <button class="btn" onclick="filterEvents('Sports')">Sports</button>
+        </div>
+
 
 
         <div class="events-grid">
 
             {% for event in events %}
 
-            <div class="event-card">
+            <div class="event-card" data-category="{{ event[6] }}">
+                {% if event[8] %}
+                <div style="height: 140px; background-image: url('{{ event[8] }}'); background-size: cover; background-position: center; border-radius: 8px 8px 0 0; margin: -20px -20px 15px -20px;"></div>
+                {% endif %}
+                
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                    <span style="background: #eee; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; color: var(--primary-color);">{{ event[6] }}</span>
+                    {% set seats_left = event[7] - event[9] %}
+                    {% if seats_left <= 0 %}
+                        <span style="background: #ffebee; color: #d32f2f; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Closed (Full)</span>
+                    {% elif seats_left <= 10 %}
+                        <span style="background: #fff3e0; color: #e65100; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Filling Fast ({{ seats_left }} left)</span>
+                    {% else %}
+                        <span style="background: #e8f5e9; color: #2e7d32; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">Open ({{ seats_left }} seats)</span>
+                    {% endif %}
+                </div>
 
-                <h2>
-                    {{ event[1] }}
-                </h2>
-
-                <p>
-                    <i class="fa-solid fa-calendar"></i> {{ event[3] }}
-                </p>
-
-                <p>
-                    <i class="fa-solid fa-location-dot"></i> {{ event[4] }}
-                </p>
-
+                <h2 style="margin-top: 0;">{{ event[1] }}</h2>
+                <p><i class="fa-solid fa-calendar"></i> {{ event[3] }}</p>
+                <p><i class="fa-solid fa-location-dot"></i> {{ event[4] }}</p>
                 <p style="color: #666; font-size: 14px; margin-top: 5px; margin-bottom: 12px;">
                     <i class="fa-solid fa-user-tie"></i> Organised by: <strong>{{ event[5] or 'University Admin' }}</strong>
                 </p>
-
-                <p>
-                    {{ event[2] }}
-                </p>
-
-                <a
-                    href="/register/{{ event[0] }}"
-                    class="btn btn-primary">
-
-                    Register Now
-
-                </a>
-
+                <p style="margin-bottom: 20px;">{{ event[2] }}</p>
+                
+                {% if seats_left > 0 %}
+                <a href="/register/{{ event[0] }}" class="btn btn-primary" style="width: 100%; text-align: center;">Register Now</a>
+                {% else %}
+                <button class="btn" style="width: 100%; cursor: not-allowed; opacity: 0.6;" disabled>Registration Closed</button>
+                {% endif %}
             </div>
 
             {% else %}
@@ -175,6 +172,32 @@
             requestAnimationFrame(raf);
         });
     </script>
+
+    <script>
+        function filterEvents(category) {
+            const cards = document.querySelectorAll('.event-card');
+            const buttons = document.querySelectorAll('.event-filters .btn');
+            
+            // Update active button state
+            buttons.forEach(btn => {
+                if(btn.textContent === category) {
+                    btn.classList.add('btn-primary');
+                } else {
+                    btn.classList.remove('btn-primary');
+                }
+            });
+
+            // Filter cards
+            cards.forEach(card => {
+                if(category === 'All' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
 </body>
 
 </html>

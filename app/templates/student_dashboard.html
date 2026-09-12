@@ -93,39 +93,43 @@
         </div>
 
 
-        <div class="dashboard-grid">
-
-            <a href="/events"
-               class="dashboard-card">
-
+        <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-bottom: 30px;">
+            <div class="stat-card" style="text-align: center;">
+                <h3>Total Registrations</h3>
+                <div class="number" style="font-size: 40px; color: var(--primary-color);">{{ total_reg }}</div>
+            </div>
+            
+            <a href="/events" class="dashboard-card" style="text-decoration: none;">
                 <h2><i class="fa-solid fa-calendar-check"></i></h2>
-
                 <h3>Browse Events</h3>
-
-                <p>
-                    View upcoming college events
-                    and register.
-                </p>
-
+                <p>View upcoming college events and register.</p>
             </a>
 
-
-            <a href="/my-events"
-               class="dashboard-card">
-
+            <a href="/my-events" class="dashboard-card" style="text-decoration: none;">
                 <h2><i class="fa-solid fa-ticket"></i></h2>
-
                 <h3>My Registrations</h3>
-
-                <p>
-                    View your registered events.
-                </p>
-
+                <p>View all your registered events and cancel if needed.</p>
             </a>
-
-
-
-
+        </div>
+        
+        <div class="dashboard-card" style="text-align: left; max-width: 800px; margin: 0 auto;">
+            <h2 style="font-size: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
+                <i class="fa-solid fa-clock-rotate-left"></i> Upcoming Schedule
+            </h2>
+            
+            {% if upcoming_events %}
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                {% for event in upcoming_events %}
+                    <li style="padding: 15px; border-radius: 8px; background: #f9f9f9; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 600; font-size: 16px;">{{ event[0] }}</span>
+                        <span style="color: #666; font-size: 14px;"><i class="fa-solid fa-calendar"></i> {{ event[1] }}</span>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p style="color: #888;">You have no upcoming events scheduled.</p>
+                <a href="/events" class="btn btn-primary" style="margin-top: 10px;">Find Events</a>
+            {% endif %}
         </div>
 
     </div>
